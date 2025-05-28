@@ -22,7 +22,7 @@ This project is designed to be hosted effortlessly on **GitHub Pages**.
 
 ## 🌐 Live Demo / Deployed Link
 
-  * [View Live Demo](https://www.google.com/url?sa=E&source=gmail&q=https://nanograf31415926535.github.io/artem-sakhniuk.github.io/)
+  * [View Live Demo](https://nanograf31415926535.github.io/artem-sakhniuk.github.io/)
 -----
 
 ## 🤝 Contributing
