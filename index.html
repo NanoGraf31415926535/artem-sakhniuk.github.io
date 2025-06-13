@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artem Sakhniuk - Aspiring Web Developer</title>
+    <title>Artem Sakhniuk - Full-Stack Web Developer</title>
     <style>
+        /* General styles */
         * {
             margin: 0;
             padding: 0;
@@ -37,6 +38,7 @@
             padding: 0 20px;
         }
 
+        /* Navigation Bar */
         nav {
             position: fixed;
             top: 0;
@@ -109,6 +111,7 @@
             transition: 0.3s;
         }
 
+        /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
@@ -196,6 +199,7 @@
             animation-delay: 4s;
         }
 
+        /* Sections */
         section {
             padding: 5rem 0;
             position: relative;
@@ -215,6 +219,7 @@
             background-clip: text;
         }
 
+        /* About Section */
         .about-content {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -261,6 +266,7 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Journey Section */
         .journey-timeline {
             position: relative;
             max-width: 800px;
@@ -281,6 +287,7 @@
             bottom: -2rem;
             width: 2px;
             background: var(--gradient);
+            z-index: 1; /* Ensure the line is behind the dots */
         }
 
         .timeline-item:last-child::before {
@@ -299,6 +306,8 @@
             font-weight: bold;
             margin-right: 2rem;
             flex-shrink: 0;
+            position: relative; /* Required for z-index to work */
+            z-index: 2; /* Ensure the dots are on top of the line */
         }
 
         .timeline-content {
@@ -314,6 +323,7 @@
             margin-bottom: 0.5rem;
         }
 
+        /* Skills Section */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -381,6 +391,7 @@
             transition: width 2s ease;
         }
 
+        /* Projects Section */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -434,6 +445,7 @@
             font-size: 0.8rem;
         }
 
+        /* Contact Section */
         .contact-content {
             text-align: center;
             max-width: 600px;
@@ -465,6 +477,7 @@
             transform: translateY(-2px);
         }
 
+        /* Footer */
         footer {
             background: var(--bg-dark);
             text-align: center;
@@ -485,6 +498,7 @@
             color: var(--secondary);
         }
 
+        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -550,6 +564,7 @@
             }
         }
 
+        /* Fade-in effect for sections */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -559,6 +574,61 @@
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Mobile menu specific styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(15, 23, 42, 0.98);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+                transition: right 0.3s ease;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .mobile-menu.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            
+            .mobile-menu.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .mobile-menu.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+        }
+        /* Ripple effect for CTA button */
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Typewriter effect for hero title */
+        @keyframes blink {
+            0%, 50% { border-color: transparent; }
+            51%, 100% { border-color: #6366f1; }
         }
     </style>
 </head>
@@ -590,11 +660,11 @@
         </div>
         <div class="hero-content">
             <h1>Artem Sakhniuk</h1>
-            <p class="subtitle">Full-Stack Web Developer</p>
+            <p class="subtitle">Full-Stack Web Developer based in the UK</p>
             <p class="description">
-                Passionate bioinformatics graduate transitioning into web development. 
-                Currently developing AI-powered applications and full-stack solutions at Goethe University FLEX Department.
-                Combining analytical thinking from biology with modern web technologies.
+                A detail-oriented Full-Stack Web Developer with a strong foundation in JavaScript, HTML, CSS, and Python.
+                Currently contributing to dynamic web projects at The Code Registry in the UK.
+                Bringing a unique blend of analytical thinking from bioinformatics with practical full-stack development skills.
             </p>
             <a href="#about" class="cta-button">Discover My Journey</a>
         </div>
@@ -609,24 +679,18 @@
                 </div>
                 <div class="about-text fade-in">
                     <p>
-                        Hi! I'm Artem Sakhniuk, a detail-oriented Web Developer with a unique background 
-                        bridging bioinformatics and web development. After completing my Bachelor's in 
-                        Biology with a specialization in Bioinformatics at Taras Shevchenko National 
-                        University in Kyiv, I discovered my passion for applying technology to solve 
-                        complex problems.
+                        Hi! I'm Artem Sakhniuk, a passionate and detail-oriented Full-Stack Web Developer based in the UK.
+                        I hold a Bachelor's degree in Biology with a specialization in Bioinformatics from Taras Shevchenko National University in Kyiv,
+                        which provided me with a robust foundation in analytical thinking and complex data analysis.
                     </p>
                     <p>
-                        What drew me to web development is the perfect combination of analytical thinking 
-                        from my biology background and creative problem-solving through code. Currently, 
-                        I'm working as a Full-Stack Web Developer at Goethe University's FLEX Department, 
-                        where I develop AI-powered applications, including an innovative ChatGPT-based 
-                        interviewer system.
+                        My journey into web development began with a natural curiosity to apply my problem-solving skills to build practical and innovative solutions.
+                        Currently, I'm working as a Full-Stack Web Developer at The Code Registry, where I'm actively involved in developing and maintaining web applications
+                        that prioritize optimal performance and user experience. I am a UK resident with full rights to work here.
                     </p>
                     <p>
-                        When I'm not coding, you can find me hiking, creating sketches in my notebook, 
-                        or playing D&D. These experiences have taught me valuable skills like creative 
-                        thinking, attention to detail, and collaborative problem-solving that I bring 
-                        to my development work.
+                        Beyond coding, I enjoy hiking, sketching in my notebook, and playing D&D. These hobbies reinforce my creative approach to challenges
+                        and my appreciation for collaborative environments, qualities I bring to every development project.
                     </p>
                 </div>
             </div>
@@ -640,55 +704,52 @@
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot">1</div>
                     <div class="timeline-content">
-                        <h3>Biology & Bioinformatics Foundation</h3>
+                        <h3>Bioinformatics Foundation (2019-2023)</h3>
                         <p>
-                            Started my academic journey studying Biology at Taras Shevchenko National 
-                            University in Kyiv, specializing in Bioinformatics. This gave me a strong 
-                            foundation in analytical thinking and data analysis, achieving a 3.9 GPA.
+                            Began my academic journey studying Biology at Taras Shevchenko National University in Kyiv, specializing in Bioinformatics.
+                            This provided a strong foundation in analytical thinking and data analysis, achieving a 3.9 GPA.
                         </p>
                     </div>
                 </div>
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot">2</div>
                     <div class="timeline-content">
-                        <h3>First Programming Steps</h3>
+                        <h3>Early Programming & Innovation (2022-2023)</h3>
                         <p>
-                            Began learning Python for bioinformatics applications. Developed a genomic 
-                            data visualization tool for my capstone project, bridging biology and IT. 
-                            This project sparked my passion for programming and software development.
+                            Started learning Python for bioinformatics applications, developing a genomic data visualization tool for my capstone project.
+                            This project bridged biology and IT, sparking my passion for programming and software development.
                         </p>
                     </div>
                 </div>
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot">3</div>
                     <div class="timeline-content">
-                        <h3>Expanding Technical Skills</h3>
+                        <h3>Full-Stack Expertise & AI Interviewer Lead (2024-2025)</h3>
                         <p>
-                            Completed comprehensive courses in Python, C programming, and back-end 
-                            development. Started exploring web technologies like JavaScript, HTML, 
-                            and CSS, discovering the exciting world of web development.
+                            Expanded my technical skills through comprehensive courses in Python, C, and backend development.
+                            Gained practical experience as a Full-Stack Web Developer at Goethe University's FLEX Department,
+                            where I led the development of an innovative ChatGPT-based interviewer system.
                         </p>
                     </div>
                 </div>
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot">4</div>
                     <div class="timeline-content">
-                        <h3>Professional Web Development</h3>
+                        <h3>Current Role: The Code Registry (06/2025-Present)</h3>
                         <p>
-                            Joined Goethe University's FLEX Department as a Full-Stack Web Developer. 
-                            Currently developing AI-powered applications, including a ChatGPT-based 
-                            interviewer system, while managing databases and creating responsive user interfaces.
+                            Currently working as a Full-Stack Web Developer at The Code Registry in the UK.
+                            Here, I am actively involved in developing dynamic websites, gaining hands-on experience with Vue.js, PHP 8+, and Laravel API development.
+                            My focus is on delivering exceptional user experiences and exceeding client expectations.
                         </p>
                     </div>
                 </div>
                 <div class="timeline-item fade-in">
                     <div class="timeline-dot">5</div>
                     <div class="timeline-content">
-                        <h3>Continuous Growth</h3>
+                        <h3>Continuous Growth & UK Opportunities</h3>
                         <p>
-                            Actively enhancing my expertise in modern frameworks like React and Node.js. 
-                            Passionate about creating user-centric solutions and eager to contribute 
-                            to innovative projects that make a real impact.
+                            Actively enhancing my expertise in modern frameworks and always seeking to contribute to innovative projects in the UK.
+                            Committed to continuous learning and applying cutting-edge technologies to create impactful solutions.
                         </p>
                     </div>
                 </div>
@@ -710,16 +771,16 @@
                 </div>
                 <div class="skill-card fade-in">
                     <div class="skill-icon">⚡</div>
-                    <h3>JavaScript</h3>
-                    <p>Modern JavaScript (ES6+) for front-end development, DOM manipulation, and creating interactive web applications.</p>
+                    <h3>JavaScript (ES6+)</h3>
+                    <p>Modern JavaScript for front-end development, DOM manipulation, and creating interactive web applications, including React and Vue.js.</p>
                     <div class="progress-bar">
-                        <div class="progress-fill" data-width="85%"></div>
+                        <div class="progress-fill" data-width="88%"></div>
                     </div>
                 </div>
                 <div class="skill-card fade-in">
                     <div class="skill-icon">🌐</div>
                     <h3>HTML5 & CSS3</h3>
-                    <p>Semantic markup, responsive design, modern CSS techniques, and creating beautiful user interfaces.</p>
+                    <p>Semantic markup, responsive design principles (Flexbox), modern CSS techniques, and creating beautiful, accessible user interfaces.</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="88%"></div>
                     </div>
@@ -727,15 +788,23 @@
                 <div class="skill-card fade-in">
                     <div class="skill-icon">🗄️</div>
                     <h3>Database Management</h3>
-                    <p>Experience with SQL databases, SQLAlchemy ORM, and designing efficient database structures for web applications.</p>
+                    <p>Experience with SQL databases (PostgreSQL), SQLAlchemy ORM, and designing efficient database structures for scalable web applications.</p>
                     <div class="progress-bar">
-                        <div class="progress-fill" data-width="80%"></div>
+                        <div class="progress-fill" data-width="85%"></div>
                     </div>
                 </div>
                 <div class="skill-card fade-in">
                     <div class="skill-icon">🤖</div>
                     <h3>AI Integration</h3>
-                    <p>Working with OpenAI APIs, developing AI-powered applications, and integrating machine learning into web solutions.</p>
+                    <p>Working with OpenAI APIs, developing AI-powered applications, and integrating machine learning capabilities into web solutions.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="78%"></div>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">🖥️</div>
+                    <h3>PHP & Laravel</h3>
+                    <p>Proficient in PHP 8+ and Laravel for robust API development and building complex backend systems.</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="75%"></div>
                     </div>
@@ -743,7 +812,7 @@
                 <div class="skill-card fade-in">
                     <div class="skill-icon">🧬</div>
                     <h3>Bioinformatics</h3>
-                    <p>Data visualization, algorithm implementation for biological datasets, and bridging biology with technology.</p>
+                    <p>Data visualization, algorithm implementation for biological datasets, and bridging biological science with technology.</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="85%"></div>
                     </div>
@@ -757,19 +826,35 @@
             <h2 class="section-title fade-in">My Projects</h2>
             <div class="projects-grid">
                 <div class="project-card fade-in">
+                    <div class="project-image">🌐</div>
+                    <div class="project-content">
+                        <h3>Dynamic Website Development (The Code Registry)</h3>
+                        <p>
+                            As a Full-Stack Web Developer at The Code Registry, I am actively involved in developing dynamic website, consistently aiming to exceed client expectations.
+                            My focus includes responsive design, optimal performance, and seamless user experience across various platforms.
+                        </p>
+                        <div class="project-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">PHP</span>
+                            <span class="tag">Laravel</span>
+                            <span class="tag">Full-Stack</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card fade-in">
                     <div class="project-image">🤖</div>
                     <div class="project-content">
-                        <h3>AI-Powered Interviewer System</h3>
+                        <h3>AI-Powered Interviewer System (Goethe University - Team Lead)</h3>
                         <p>
-                            Developed an innovative ChatGPT-based interviewer application at Goethe University. 
-                            Features intelligent questioning, response analysis, and comprehensive database 
-                            management for interview data.
+                            At Goethe University, I led the development of an innovative ChatGPT-based interviewer application.
+                            This project involved intelligent questioning, response analysis, and comprehensive database management for interview data, achieving 90% client satisfaction.
                         </p>
                         <div class="project-tags">
                             <span class="tag">Python</span>
                             <span class="tag">OpenAI API</span>
                             <span class="tag">Database Design</span>
                             <span class="tag">Full-Stack</span>
+                            <span class="tag">Team Lead</span>
                         </div>
                     </div>
                 </div>
@@ -778,32 +863,14 @@
                     <div class="project-content">
                         <h3>Genomic Data Visualization Tool</h3>
                         <p>
-                            Capstone project creating a Python-based tool for visualizing genomic data. 
-                            Implemented efficient algorithms for managing large-scale biological datasets 
-                            with interactive data visualization capabilities.
+                            My capstone project: a Python-based tool for visualizing genomic data.
+                            Implemented efficient algorithms for managing large-scale biological datasets with interactive data visualization capabilities.
                         </p>
                         <div class="project-tags">
                             <span class="tag">Python</span>
                             <span class="tag">Data Visualization</span>
                             <span class="tag">Bioinformatics</span>
                             <span class="tag">Algorithm Design</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card fade-in">
-                    <div class="project-image">🌐</div>
-                    <div class="project-content">
-                        <h3>Full-Stack Web Applications</h3>
-                        <p>
-                            Currently developing and maintaining multiple web applications at FLEX Department. 
-                            Focus on responsive design, optimal performance, and seamless user experience 
-                            across different platforms.
-                        </p>
-                        <div class="project-tags">
-                            <span class="tag">JavaScript</span>
-                            <span class="tag">HTML/CSS</span>
-                            <span class="tag">Responsive Design</span>
-                            <span class="tag">UX/UI</span>
                         </div>
                     </div>
                 </div>
@@ -816,10 +883,9 @@
             <h2 class="section-title fade-in">Let's Connect</h2>
             <div class="contact-content fade-in">
                 <p>
-                    I'm currently working as a Full-Stack Web Developer at Goethe University and 
-                    always open to discussing new opportunities, collaborations, or interesting projects. 
-                    With my unique background in bioinformatics and growing expertise in web development, 
-                    I bring a fresh perspective to technical challenges.
+                    I'm currently based in the UK and working as a Full-Stack Web Developer at The Code Registry.
+                    I am always eager to discuss new opportunities, potential collaborations, or exciting projects within the UK.
+                    My blend of bioinformatics insight and robust web development skills allows me to approach challenges with a fresh and analytical perspective.
                 </p>
                 <div class="contact-links">
                     <a href="mailto:artemsakhnyuk33@gmail.com" class="contact-link">
@@ -852,6 +918,7 @@
     </footer>
 
     <script>
+        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -864,6 +931,8 @@
                 }
             });
         });
+
+        // Navbar background change on scroll
         window.addEventListener('scroll', () => {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 100) {
@@ -872,6 +941,8 @@
                 navbar.style.background = 'rgba(15, 23, 42, 0.95)';
             }
         });
+
+        // Fade-in animations on scroll
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -888,24 +959,28 @@
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
         });
+
+        // Skill bar progress animation on scroll
         const progressObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const progressFill = entry.target.querySelector('.progress-fill');
                     if (progressFill) {
                         const width = progressFill.getAttribute('data-width');
+                        // Small delay to ensure the animation is visible
                         setTimeout(() => {
                             progressFill.style.width = width;
                         }, 200);
                     }
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.5 }); // Trigger when 50% of the skill card is visible
 
         document.querySelectorAll('.skill-card').forEach(card => {
             progressObserver.observe(card);
         });
 
+        // Skill card hover effects
         document.querySelectorAll('.skill-card').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.style.transform = 'translateY(-5px) scale(1.02)';
@@ -916,6 +991,7 @@
             });
         });
 
+        // CTA button ripple effect
         document.querySelector('.cta-button').addEventListener('click', function(e) {
             let ripple = document.createElement('span');
             ripple.style.position = 'absolute';
@@ -923,35 +999,22 @@
             ripple.style.background = 'rgba(255,255,255,0.3)';
             ripple.style.transform = 'scale(0)';
             ripple.style.animation = 'ripple 0.6s linear';
+            // Calculate click position relative to the button
             ripple.style.left = (e.clientX - e.target.offsetLeft) + 'px';
             ripple.style.top = (e.clientY - e.target.offsetTop) + 'px';
             
             this.appendChild(ripple);
             
+            // Remove ripple after animation
             setTimeout(() => {
                 ripple.remove();
             }, 600);
         });
 
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-            
-            .cta-button {
-                position: relative;
-                overflow: hidden;
-            }
-        `;
-        document.head.appendChild(style);
-
+        // Typewriter effect for hero title on load
         function typeWriter(element, text, speed = 100) {
             let i = 0;
-            element.innerHTML = '';
+            element.innerHTML = ''; // Clear existing text
             
             function type() {
                 if (i < text.length) {
@@ -959,32 +1022,25 @@
                     i++;
                     setTimeout(type, speed);
                 } else {
-                    element.style.borderRight = 'none';
+                    element.style.borderRight = 'none'; // Remove blinking cursor at the end
                 }
             }
             
-            element.style.borderRight = '3px solid';
+            element.style.borderRight = '3px solid'; // Add blinking cursor
             element.style.animation = 'blink 1s infinite';
-            type();
+            type(); // Start typing
         }
-
-        const blinkStyle = document.createElement('style');
-        blinkStyle.textContent = `
-            @keyframes blink {
-                0%, 50% { border-color: transparent; }
-                51%, 100% { border-color: #6366f1; }
-            }
-        `;
-        document.head.appendChild(blinkStyle);
 
         window.addEventListener('load', () => {
             const heroTitle = document.querySelector('.hero h1');
             const originalText = heroTitle.textContent;
+            // Delay typing to allow other elements to load
             setTimeout(() => {
                 typeWriter(heroTitle, originalText, 150);
             }, 1000);
         });
 
+        // Project card hover effects
         document.querySelectorAll('.project-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-10px) rotateX(5deg)';
@@ -996,15 +1052,18 @@
                 this.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
             });
         });
+
+        // Floating elements animation (random movement)
         const floatingElements = document.querySelectorAll('.floating-element');
         floatingElements.forEach((element, index) => {
             setInterval(() => {
-                const randomX = Math.random() * 20 - 10;
-                const randomY = Math.random() * 20 - 10;
+                const randomX = Math.random() * 20 - 10; // -10 to +10px
+                const randomY = Math.random() * 20 - 10; // -10 to +10px
                 element.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${Math.random() * 360}deg)`;
-            }, 3000 + index * 1000);
+            }, 3000 + index * 1000); // Stagger animations
         });
 
+        // Background particle animation
         function createParticle() {
             const particle = document.createElement('div');
             particle.style.position = 'fixed';
@@ -1012,74 +1071,38 @@
             particle.style.height = '4px';
             particle.style.background = 'rgba(99, 102, 241, 0.5)';
             particle.style.borderRadius = '50%';
-            particle.style.pointerEvents = 'none';
+            particle.style.pointerEvents = 'none'; // Ensure particles don't interfere with clicks
             particle.style.zIndex = '1';
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = window.innerHeight + 'px';
+            particle.style.left = Math.random() * window.innerWidth + 'px'; // Random x position
+            particle.style.top = window.innerHeight + 'px'; // Start from bottom of screen
             
             document.body.appendChild(particle);
             
+            // Animate particle upwards and fade out
             const animation = particle.animate([
                 { transform: 'translateY(0px)', opacity: 1 },
-                { transform: `translateY(-${window.innerHeight + 100}px)`, opacity: 0 }
+                { transform: `translateY(-${window.innerHeight + 100}px)`, opacity: 0 } // Move beyond top
             ], {
-                duration: Math.random() * 3000 + 2000,
+                duration: Math.random() * 3000 + 2000, // Random duration
                 easing: 'linear'
             });
             
+            // Remove particle after animation
             animation.onfinish = () => particle.remove();
         }
 
-        setInterval(createParticle, 300);
+        setInterval(createParticle, 300); // Create a new particle every 300ms
 
+        // Mobile menu toggle functionality
         const mobileMenu = document.querySelector('.mobile-menu');
         const navLinks = document.querySelector('.nav-links');
         
         mobileMenu.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
+            mobileMenu.classList.toggle('active'); // Animate hamburger icon
         });
 
-        const mobileStyles = document.createElement('style');
-        mobileStyles.textContent = `
-            @media (max-width: 768px) {
-                .nav-links {
-                    position: fixed;
-                    top: 70px;
-                    right: -100%;
-                    width: 100%;
-                    height: calc(100vh - 70px);
-                    background: rgba(15, 23, 42, 0.98);
-                    flex-direction: column;
-                    justify-content: flex-start;
-                    align-items: center;
-                    padding-top: 2rem;
-                    transition: right 0.3s ease;
-                }
-                
-                .nav-links.active {
-                    right: 0;
-                }
-                
-                .nav-links li {
-                    margin: 1rem 0;
-                }
-                
-                .mobile-menu.active span:nth-child(1) {
-                    transform: rotate(45deg) translate(5px, 5px);
-                }
-                
-                .mobile-menu.active span:nth-child(2) {
-                    opacity: 0;
-                }
-                
-                .mobile-menu.active span:nth-child(3) {
-                    transform: rotate(-45deg) translate(7px, -6px);
-                }
-            }
-        `;
-        document.head.appendChild(mobileStyles);
-
+        // Scroll-to-top button
         const scrollTopButton = document.createElement('button');
         scrollTopButton.innerHTML = '↑';
         scrollTopButton.style.cssText = `
@@ -1095,7 +1118,7 @@
             font-size: 20px;
             cursor: pointer;
             opacity: 0;
-            visibility: hidden;
+            visibility: hidden; /* Hide initially */
             transition: all 0.3s ease;
             z-index: 1000;
             box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
@@ -1117,6 +1140,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
+        // Preloader/Loader animation on page load
         window.addEventListener('load', () => {
             const loader = document.createElement('div');
             loader.style.cssText = `
@@ -1143,6 +1167,7 @@
                 animation: spin 1s linear infinite;
             `;
             
+            // Add spin keyframes directly to the head for immediate availability
             const spinStyle = document.createElement('style');
             spinStyle.textContent = `
                 @keyframes spin {
@@ -1155,9 +1180,10 @@
             loader.appendChild(spinner);
             document.body.appendChild(loader);
             
+            // Fade out and remove loader after 1.5 seconds
             setTimeout(() => {
                 loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 500);
+                setTimeout(() => loader.remove(), 500); // Remove after fade out
             }, 1500);
         });
     </script>
