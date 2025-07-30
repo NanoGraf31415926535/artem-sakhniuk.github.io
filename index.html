@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF="8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artem Sakhniuk - Full-Stack Web Developer</title>
+    <script src="https://js.puter.com/v2/"></script> <!-- Puter.js library -->
     <style>
         /* General styles */
         * {
@@ -304,8 +305,8 @@
             font-weight: bold;
             margin-right: 2rem;
             flex-shrink: 0;
-            position: relative; 
-            z-index: 2; 
+            position: relative; /* Required for z-index to work */
+            z-index: 2; /* Ensure the dots are on top of the line */
         }
 
         .timeline-content {
@@ -886,7 +887,7 @@
             <h2 class="section-title fade-in">About Me</h2>
             <div class="about-content">
                 <div class="about-image fade-in">
-                    <div class="profile-pic">👩‍💻</div>
+                    <div class="profile-pic">&#x1F469;&#x200D;&#x1F4BB;</div> <!-- 👩‍💻 -->
                 </div>
                 <div class="about-text fade-in">
                     <p>
@@ -973,7 +974,7 @@
             <h2 class="section-title fade-in">What I've Learned</h2>
             <div class="skills-grid">
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🐍</div>
+                    <div class="skill-icon">&#x1F40D;</div> <!-- 🐍 -->
                     <h3>Python</h3>
                     <p>Advanced Python programming for data analysis, bioinformatics tools, and backend development with FastAPI, Flask, and Django.</p>
                     <div class="progress-bar">
@@ -981,7 +982,7 @@
                     </div>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">⚡</div>
+                    <div class="skill-icon">&#x26A1;</div> <!-- ⚡ -->
                     <h3>JavaScript (ES6+)</h3>
                     <p>Modern JavaScript for front-end development, DOM manipulation, and creating interactive web applications, including React and Vue.js.</p>
                     <div class="progress-bar">
@@ -989,7 +990,7 @@
                     </div>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🌐</div>
+                    <div class="skill-icon">&#x1F310;</div> <!-- 🌐 -->
                     <h3>HTML5 & CSS3</h3>
                     <p>Semantic markup, responsive design principles (Flexbox), modern CSS techniques, and creating beautiful, accessible user interfaces.</p>
                     <div class="progress-bar">
@@ -997,7 +998,7 @@
                     </div>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🗄️</div>
+                    <div class="skill-icon">&#x1F5C4;</div> <!-- 🗄️ -->
                     <h3>Database Management</h3>
                     <p>Experience with SQL databases (PostgreSQL), SQLAlchemy ORM, and designing efficient database structures for scalable web applications.</p>
                     <div class="progress-bar">
@@ -1005,7 +1006,7 @@
                     </div>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🤖</div>
+                    <div class="skill-icon">&#x1F916;</div> <!-- 🤖 -->
                     <h3>AI Integration</h3>
                     <p>Working with OpenAI APIs, developing AI-powered applications, and integrating machine learning capabilities into web solutions.</p>
                     <div class="progress-bar">
@@ -1013,7 +1014,7 @@
                     </div>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🖥️</div>
+                    <div class="skill-icon">&#x1F5A5;</div> <!-- 🖥️ -->
                     <h3>PHP & Laravel</h3>
                     <p>Proficient in PHP 8+ and Laravel for robust API development and building complex backend systems.</p>
                     <div class="progress-bar">
@@ -1021,7 +1022,7 @@
                     </div>
                 </div>
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">🧬</div>
+                    <div class="skill-icon">&#x1F9EC;</div> <!-- 🧬 -->
                     <h3>Bioinformatics</h3>
                     <p>Data visualization, algorithm implementation for biological datasets, and bridging biological science with technology.</p>
                     <div class="progress-bar">
@@ -1037,7 +1038,7 @@
             <h2 class="section-title fade-in">My Projects</h2>
             <div class="projects-grid">
                 <div class="project-card fade-in">
-                    <div class="project-image">🌐</div>
+                    <div class="project-image">&#x1F310;</div> <!-- 🌐 -->
                     <div class="project-content">
                         <h3>Dynamic Website Development (The Code Registry)</h3>
                         <p class="project-short-description">
@@ -1049,12 +1050,11 @@
                             <span class="tag">Laravel</span>
                             <span class="tag">Full-Stack</span>
                         </div>
-                        <!-- Removed generate-description-btn -->
                         <div class="project-description-full"></div>
                     </div>
                 </div>
                 <div class="project-card fade-in">
-                    <div class="project-image">🤖</div>
+                    <div class="project-image">&#x1F916;</div> <!-- 🤖 -->
                     <div class="project-content">
                         <h3>AI-Powered Interviewer System (Goethe University - Team Lead)</h3>
                         <p class="project-short-description">
@@ -1067,12 +1067,11 @@
                             <span class="tag">Full-Stack</span>
                             <span class="tag">Team Lead</span>
                         </div>
-                        <!-- Removed generate-description-btn -->
                         <div class="project-description-full"></div>
                     </div>
                 </div>
                 <div class="project-card fade-in">
-                    <div class="project-image">🧬</div>
+                    <div class="project-image">&#x1F9EC;</div> <!-- 🧬 -->
                     <div class="project-content">
                         <h3>Genomic Data Visualization Tool</h3>
                         <p class="project-short-description">
@@ -1084,7 +1083,6 @@
                             <span class="tag">Bioinformatics</span>
                             <span class="tag">Algorithm Design</span>
                         </div>
-                        <!-- Removed generate-description-btn -->
                         <div class="project-description-full"></div>
                     </div>
                 </div>
@@ -1103,16 +1101,16 @@
                 </p>
                 <div class="contact-links">
                     <a href="mailto:artemsakhnyuk33@gmail.com" class="contact-link">
-                        📧 Email Me
+                        &#x1F4E7; Email Me <!-- 📧 -->
                     </a>
                     <a href="https://www.linkedin.com/in/artem-sakhniuk-0851b4231/" class="contact-link" target="_blank">
-                        💼 LinkedIn
+                        &#x1F4BC; LinkedIn <!-- 💼 -->
                     </a>
                     <a href="https://github.com/NanoGraf31415926535" class="contact-link" target="_blank">
-                        🐙 GitHub
+                        &#x1F419; GitHub <!-- 🐙 -->
                     </a>
                     <a href="tel:+447846481665" class="contact-link">
-                        📱 Call Me
+                        &#x1F4F1; Call Me <!-- 📱 -->
                     </a>
                 </div>
             </div>
@@ -1208,14 +1206,13 @@
                         const progressFill = entry.target.querySelector('.progress-fill');
                         if (progressFill) {
                             const width = progressFill.getAttribute('data-width');
-                            // Small delay to ensure the animation is visible
                             setTimeout(() => {
                                 progressFill.style.width = width;
                             }, 200);
                         }
                     }
                 });
-            }, { threshold: 0.5 }); // Trigger when 50% of the skill card is visible
+            }, { threshold: 0.5 });
 
             document.querySelectorAll('.skill-card').forEach(card => {
                 progressObserver.observe(card);
@@ -1241,13 +1238,11 @@
                     ripple.style.background = 'rgba(255,255,255,0.3)';
                     ripple.style.transform = 'scale(0)';
                     ripple.style.animation = 'ripple 0.6s linear';
-                    // Calculate click position relative to the button
                     ripple.style.left = (e.clientX - e.target.offsetLeft) + 'px';
                     ripple.style.top = (e.clientY - e.target.offsetTop) + 'px';
                     
                     this.appendChild(ripple);
                     
-                    // Remove ripple after animation
                     setTimeout(() => {
                         ripple.remove();
                     }, 600);
@@ -1257,7 +1252,7 @@
             // Typewriter effect for hero title on load
             function typeWriter(element, text, speed = 100) {
                 let i = 0;
-                element.innerHTML = ''; // Clear existing text
+                element.innerHTML = '';
                 
                 function type() {
                     if (i < text.length) {
@@ -1265,19 +1260,18 @@
                         i++;
                         setTimeout(type, speed);
                     } else {
-                        element.style.borderRight = 'none'; // Remove blinking cursor at the end
+                        element.style.borderRight = 'none';
                     }
                 }
                 
-                element.style.borderRight = '3px solid'; // Add blinking cursor
+                element.style.borderRight = '3px solid';
                 element.style.animation = 'blink 1s infinite';
-                type(); // Start typing
+                type();
             }
 
             const heroTitle = document.querySelector('.hero h1');
-            if (heroTitle) { // Added null check for robustness
+            if (heroTitle) {
                 const originalText = heroTitle.textContent;
-                // Directly call typeWriter without setTimeout or window.onload
                 typeWriter(heroTitle, originalText, 150);
             }
 
@@ -1298,10 +1292,10 @@
             const mobileMenu = document.querySelector('.mobile-menu');
             const navLinks = document.querySelector('.nav-links');
             
-            if (mobileMenu && navLinks) { // Added null checks
+            if (mobileMenu && navLinks) {
                 mobileMenu.addEventListener('click', () => {
                     navLinks.classList.toggle('active');
-                    mobileMenu.classList.toggle('active'); // Animate hamburger icon
+                    mobileMenu.classList.toggle('active');
                 });
             }
 
@@ -1321,7 +1315,7 @@
                 font-size: 20px;
                 cursor: pointer;
                 opacity: 0;
-                visibility: hidden; /* Hide initially */
+                visibility: hidden;
                 transition: all 0.3s ease;
                 z-index: 1000;
                 box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
@@ -1344,7 +1338,6 @@
             });
 
             // Preloader/Loader animation on page load
-            // This now runs directly on DOMContentLoaded, not window.onload
             const loader = document.createElement('div');
             loader.style.cssText = `
                 position: fixed;
@@ -1370,7 +1363,6 @@
                 animation: spin 1s linear infinite;
             `;
             
-            // Add spin keyframes directly to the head for immediate availability
             const spinStyle = document.createElement('style');
             spinStyle.textContent = `
                 @keyframes spin {
@@ -1383,10 +1375,9 @@
             loader.appendChild(spinner);
             document.body.appendChild(loader);
             
-            // Fade out and remove loader after 1.5 seconds
             setTimeout(() => {
                 loader.style.opacity = '0';
-                setTimeout(() => loader.remove(), 500); // Remove after fade out
+                setTimeout(() => loader.remove(), 500);
             }, 1500);
 
             // Three.js Particle System
@@ -1394,43 +1385,34 @@
             const canvas = document.getElementById('threejs-canvas');
             const heroSection = document.getElementById('home');
 
-            if (canvas && heroSection) { // Ensure canvas and heroSection exist before initializing Three.js
+            if (canvas && heroSection) {
                 function initThreeJS() {
-                    // Scene
                     scene = new THREE.Scene();
-
-                    // Camera
                     camera = new THREE.PerspectiveCamera(75, heroSection.clientWidth / heroSection.clientHeight, 0.1, 1000);
                     camera.position.z = 5;
-
-                    // Renderer
                     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
                     renderer.setSize(heroSection.clientWidth, heroSection.clientHeight);
                     renderer.setPixelRatio(window.devicePixelRatio);
 
-                    // Particles
                     const particleCount = 2000;
                     const positions = new Float32Array(particleCount * 3);
                     const colors = new Float32Array(particleCount * 3);
                     const sizes = new Float32Array(particleCount);
 
-                    const color1 = new THREE.Color(0x6366f1); // Primary color
-                    const color2 = new THREE.Color(0xec4899); // Secondary color
+                    const color1 = new THREE.Color(0x6366f1);
+                    const color2 = new THREE.Color(0xec4899);
 
                     for (let i = 0; i < particleCount; i++) {
-                        // Position
-                        positions[i * 3 + 0] = (Math.random() - 0.5) * 10; // X
-                        positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // Y
-                        positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // Z
+                        positions[i * 3 + 0] = (Math.random() - 0.5) * 10;
+                        positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+                        positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
 
-                        // Color (interpolate between two colors)
                         const mixedColor = new THREE.Color();
                         mixedColor.lerpColors(color1, color2, Math.random());
                         colors[i * 3 + 0] = mixedColor.r;
                         colors[i * 3 + 1] = mixedColor.g;
                         colors[i * 3 + 2] = mixedColor.b;
 
-                        // Size
                         sizes[i] = Math.random() * 0.1 + 0.05;
                     }
 
@@ -1439,7 +1421,6 @@
                     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
                     geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-                    // Custom Shader Material for particles
                     const material = new THREE.ShaderMaterial({
                         uniforms: {
                             pointTexture: { value: new THREE.TextureLoader().load('https://threejs.org/examples/textures/sprites/disc.png') },
@@ -1474,7 +1455,6 @@
                     particles = new THREE.Points(geometry, material);
                     scene.add(particles);
 
-                    // Mouse interaction
                     document.addEventListener('mousemove', onDocumentMouseMove, false);
                     window.addEventListener('resize', onWindowResize, false);
                 }
@@ -1496,11 +1476,9 @@
                     requestAnimationFrame(animateThreeJS);
 
                     if (particles && particles.material.uniforms.time) {
-                        // Rotate particles slowly
                         particles.rotation.x += 0.0005;
                         particles.rotation.y += 0.0008;
 
-                        // Move camera based on mouse position
                         camera.position.x += (mouseX * 0.0001 - camera.position.x) * 0.05;
                         camera.position.y += (-mouseY * 0.0001 - camera.position.y) * 0.05;
                         camera.lookAt(scene.position);
@@ -1513,12 +1491,10 @@
                     }
                 }
 
-                // Initialize Three.js when the window loads
-                canvas.style.display = 'block'; // Make sure it's visible
+                canvas.style.display = 'block';
                 initThreeJS();
                 animateThreeJS();
             }
-
 
             // AI Chat Modal Logic
             const openAIChatBtn = document.getElementById('open-ai-chat-btn');
@@ -1529,19 +1505,34 @@
             const chatSendBtn = document.getElementById('chat-send-btn');
             const premadePromptBtns = document.querySelectorAll('.premade-prompt-btn');
 
-            let chatConversation = []; // Stores the conversation history for the AI
+            let chatConversation = []; // Stores only the user and AI messages for display and history reconstruction
+
+            // Initial content for the AI to refer to (context about Artem's portfolio)
+            const portfolioContext = `
+                You are an AI assistant representing Artem Sakhniuk. Your goal is to answer questions about him based on his portfolio information. Be concise and professional.
+                Artem Sakhniuk is a Full-Stack Web Developer based in the UK with a background in Bioinformatics.
+                He holds a Bachelor's degree in Biology with a specialization in Bioinformatics from Taras Shevchenko National University in Kyiv (3.9 GPA).
+                He has experience with Python (90%), JavaScript (88%), HTML5 & CSS3 (88%), Database Management (85%), AI Integration (78%), PHP & Laravel (75%), and Bioinformatics (85%).
+                His projects include:
+                1. Dynamic Website Development at The Code Registry: Developed dynamic web solutions using Vue.js, PHP, and Laravel, focusing on delivering intuitive and high-performing digital experiences. A key challenge was ensuring seamless responsiveness and optimal performance across diverse devices, which I addressed through meticulous optimization and architectural planning. This project significantly enhanced my expertise in building scalable, secure, and user-friendly full-stack applications that consistently exceed client expectations.
+                2. AI-Powered Interviewer System (Goethe University - Team Lead): Led the creation of an innovative AI-Powered Interviewer System, harnessing Python and the OpenAI API to conduct intelligent interviews and analyze responses dynamically. This full-stack endeavor demanded robust database design for efficient data management and overcoming integration challenges inherent in deploying advanced AI for nuanced candidate insights. My leadership was pivotal in delivering a solution that achieved 90% client satisfaction, proving my capacity to manage complex technical projects and drive tangible value through cutting-edge AI applications.
+                3. Genomic Data Visualization Tool: A Python-based capstone project for visualizing genomic data, directly addressing the complexities of large-scale biological data interpretation. This involved overcoming significant performance challenges by architecting and implementing efficient algorithms for data management and rendering. The resulting interactive visualization capabilities empower researchers to derive critical insights from vast genomic datasets, demonstrating my proficiency in Python, data visualization, and algorithm design within a bioinformatics context.
+                He is currently working as a Full-Stack Web Developer at The Code Registry in the UK.
+                His hobbies include hiking, sketching, and playing D&D.
+                He is a UK resident with full rights to work.
+            `;
 
             // Function to display messages in the chat history
             function displayMessage(sender, text) {
                 const messageDiv = document.createElement('div');
                 messageDiv.classList.add('chat-message', sender);
                 messageDiv.innerHTML = `
-                    <div class="chat-avatar">${sender === 'user' ? '👤' : '🤖'}</div>
+                    <div class="chat-avatar">${sender === 'user' ? '&#x1F464;' : '&#x1F47E;'}</div> <!-- Changed AI avatar to 👾, User to 👤 -->
                     <div class="chat-bubble">${text}</div>
                 `;
                 if (chatHistoryDiv) {
                     chatHistoryDiv.appendChild(messageDiv);
-                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Scroll to bottom
+                    chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
                 }
             }
 
@@ -1550,16 +1541,16 @@
                 if (!message.trim()) return;
 
                 displayMessage('user', message);
-                chatConversation.push({ role: 'user', parts: [{ text: message }] });
+                chatConversation.push({ role: 'user', content: message });
+
                 if (chatInput) {
-                    chatInput.value = ''; // Clear input field
+                    chatInput.value = '';
                 }
 
-                // Show loading spinner
                 const loadingMessageDiv = document.createElement('div');
                 loadingMessageDiv.classList.add('chat-message', 'ai', 'loading-message');
                 loadingMessageDiv.innerHTML = `
-                    <div class="chat-avatar">🤖</div>
+                    <div class="chat-avatar">&#x1F47E;</div> <!-- Changed AI avatar to 👾 -->
                     <div class="loading-spinner"></div>
                     <div class="chat-bubble">Thinking...</div>
                 `;
@@ -1569,56 +1560,33 @@
                 }
 
                 try {
-                    const payload = { contents: chatConversation };
-                    const apiKey = ""; // Leave as-is for Canvas to inject
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-                    let response;
-                    let result;
-                    let retries = 0;
-                    const maxRetries = 5;
-                    const baseDelay = 1000; // 1 second
-
-                    while (retries < maxRetries) {
-                        try {
-                            response = await fetch(apiUrl, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(payload)
-                            });
-                            result = await response.json();
-                            if (result.candidates && result.candidates.length > 0 &&
-                                result.candidates[0].content && result.candidates[0].content.parts &&
-                                result.candidates[0].content.parts.length > 0) {
-                                const aiResponseText = result.candidates[0].content.parts[0].text;
-                                chatConversation.push({ role: 'model', parts: [{ text: aiResponseText }] });
-                                displayMessage('ai', aiResponseText);
-                                break; // Exit loop on success
-                            } else {
-                                throw new Error('Unexpected API response structure');
-                            }
-                        } catch (error) {
-                            console.error(`Attempt ${retries + 1} failed:`, error);
-                            retries++;
-                            if (retries < maxRetries) {
-                                const delay = baseDelay * Math.pow(2, retries);
-                                await new Promise(resolve => setTimeout(resolve, delay));
-                            } else {
-                                displayMessage('ai', 'Sorry, I am having trouble connecting right now. Please try again later.');
-                            }
+                    // Construct the full prompt including context and history for Puter.js
+                    let fullPromptForAI = portfolioContext + "\n\nConversation History:\n";
+                    chatConversation.forEach(msg => {
+                        if (msg.role === 'user') {
+                            fullPromptForAI += `User: ${msg.content}\n`;
+                        } else if (msg.role === 'assistant') {
+                            fullPromptForAI += `Artem AI: ${msg.content}\n`;
                         }
-                    }
+                    });
+                    fullPromptForAI += `User: ${message}\nArtem AI:`; // Prompt the AI to respond
+
+                    // Call puter.ai.chat
+                    // The 'model' parameter is optional but good practice to specify
+                    const aiResponseText = await puter.ai.chat(fullPromptForAI, { model: "gpt-4o" });
+
+                    chatConversation.push({ role: 'assistant', content: aiResponseText });
+                    displayMessage('ai', aiResponseText);
 
                 } catch (error) {
                     console.error('Error sending message to AI:', error);
-                    displayMessage('ai', 'An error occurred while processing your request. Please try again.');
+                    displayMessage('ai', 'Sorry, I am having trouble connecting to the AI. Please try again later.');
                 } finally {
-                    // Remove loading spinner
                     if (loadingMessageDiv.parentNode) {
                         loadingMessageDiv.parentNode.removeChild(loadingMessageDiv);
                     }
                     if (chatHistoryDiv) {
-                        chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Scroll to bottom again
+                        chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
                     }
                 }
             }
@@ -1628,10 +1596,10 @@
                 openAIChatBtn.addEventListener('click', () => {
                     aiChatModal.classList.add('active');
                     chatInput.focus();
-                    // Initial AI greeting
-                    if (chatConversation.length === 2) { // Check if only initial context and model response are present
+                    // Initial AI greeting - only if chat history is empty
+                    if (chatConversation.length === 0) {
                         displayMessage('ai', "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!");
-                        chatConversation.push({ role: 'model', parts: [{ text: "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!" }] });
+                        chatConversation.push({ role: 'assistant', content: "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!" });
                     }
                 });
             }
@@ -1653,8 +1621,8 @@
             // Event listener for sending message on Enter key press
             if (chatInput) {
                 chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) { // Allow Shift+Enter for new line
-                        e.preventDefault(); // Prevent new line in textarea
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
                         sendMessage(chatInput.value);
                     }
                 });
@@ -1666,23 +1634,6 @@
                     sendMessage(button.textContent);
                 });
             });
-
-            // Initial content for the AI to refer to (context about Artem's portfolio)
-            const portfolioContext = `
-                Artem Sakhniuk is a Full-Stack Web Developer based in the UK with a background in Bioinformatics.
-                He holds a Bachelor's degree in Biology with a specialization in Bioinformatics from Taras Shevchenko National University in Kyiv (3.9 GPA).
-                He has experience with Python (90%), JavaScript (ES6+) (88%), HTML5 & CSS3 (88%), Database Management (85%), AI Integration (78%), PHP & Laravel (75%), and Bioinformatics (85%).
-                His projects include:
-                1. Dynamic Website Development at The Code Registry: Developed dynamic web solutions using Vue.js, PHP, and Laravel, focusing on delivering intuitive and high-performing digital experiences. A key challenge was ensuring seamless responsiveness and optimal performance across diverse devices, which I addressed through meticulous optimization and architectural planning. This project significantly enhanced my expertise in building scalable, secure, and user-friendly full-stack applications that consistently exceed client expectations.
-                2. AI-Powered Interviewer System (Goethe University - Team Lead): Led the creation of an innovative AI-Powered Interviewer System, harnessing Python and the OpenAI API to conduct intelligent interviews and analyze responses dynamically. This full-stack endeavor demanded robust database design for efficient data management and overcoming integration challenges inherent in deploying advanced AI for nuanced candidate insights. My leadership was pivotal in delivering a solution that achieved 90% client satisfaction, proving my capacity to manage complex technical projects and drive tangible value through cutting-edge AI applications.
-                3. Genomic Data Visualization Tool: A Python-based capstone project for visualizing genomic data, directly addressing the complexities of large-scale biological data interpretation. This involved overcoming significant performance challenges by architecting and implementing efficient algorithms for data management and rendering. The resulting interactive visualization capabilities empower researchers to derive critical insights from vast genomic datasets, demonstrating my proficiency in Python, data visualization, and algorithm design within a bioinformatics context.
-                He is currently working as a Full-Stack Web Developer at The Code Registry in the UK.
-                His hobbies include hiking, sketching, and playing D&D.
-                He is a UK resident with full rights to work.
-            `;
-            // Prepend the context to the conversation history
-            chatConversation.push({ role: 'user', parts: [{ text: `You are an AI assistant representing Artem Sakhniuk. Your goal is to answer questions about him based on his portfolio information. Be concise and professional. Here is his portfolio context:\n\n${portfolioContext}` }] });
-            chatConversation.push({ role: 'model', parts: [{ text: "Understood. I will answer questions about Artem Sakhniuk based on the provided portfolio context." }] });
         });
     </script>
 </body>
