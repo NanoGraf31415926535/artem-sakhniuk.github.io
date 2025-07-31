@@ -904,6 +904,41 @@
             font-style: italic;
         }
 
+        .skill-info-btn {
+            margin-top: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-light);
+            color: var(--text-light);
+            border: 1px solid var(--primary);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            width: auto;
+            display: inline-block;
+        }
+
+        .skill-info-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Add these style rules to your existing styles */
+        .retry-message {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 0.9rem;
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.9rem;
+            margin: 5px 0;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -1066,6 +1101,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="88%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="core-languages">Learn More</button>
                 </div>
 
                 <!-- Frontend Development -->
@@ -1076,6 +1112,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="88%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="frontend">Learn More</button>
                 </div>
 
                 <!-- Backend Development -->
@@ -1086,6 +1123,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="85%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="backend">Learn More</button>
                 </div>
 
                 <!-- Database & Data Management -->
@@ -1096,6 +1134,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="85%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="database">Learn More</button>
                 </div>
 
                 <!-- Data Science & Bioinformatics -->
@@ -1106,6 +1145,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="85%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="data-science">Learn More</button>
                 </div>
 
                 <!-- AI & Machine Learning -->
@@ -1116,6 +1156,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="78%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="ai">Learn More</button>
                 </div>
 
                 <!-- Development Tools -->
@@ -1126,6 +1167,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="90%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="tools">Learn More</button>
                 </div>
 
                 <!-- Project Management -->
@@ -1136,6 +1178,7 @@
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="85%"></div>
                     </div>
+                    <button class="skill-info-btn" data-skill="management">Learn More</button>
                 </div>
             </div>
         </div>
@@ -1698,7 +1741,7 @@
                 Artem Sakhniuk is a UK-based Full-Stack Web Developer with a unique background in Bioinformatics. He holds full rights to work in the UK. His academic foundation includes a Bachelor of Biology with a specialization in Bioinformatics from Taras Shevchenko National University, where he graduated with a 3.9 GPA.
 
                 **Core Expertise:**
-                * **Full-Stack Development:** React, Vue.js, Next.js, Node.js, Django, Flask, Laravel, REST APIs.
+                * **Full-Stack Development:** React, Vue.js, and Next.js on the front end, and **Node.js, Django, and Laravel** for backend development.
                 * **Frontend Technologies:** HTML5, CSS3, Flexbox.
                 * **Backend & Languages:** Python, JavaScript/ES6+, PHP, C++, C#, Java.
                 * **Database Management:** PostgreSQL, SQL, SQLAlchemy.
@@ -1738,8 +1781,17 @@
                 }
             }
 
-            // Function to send message to AI
-            async function sendMessage(message) {
+            // Add this before the sendMessage function
+            const MAX_RETRIES = 3;
+            const RETRY_DELAY = 1000; // 1 second
+
+            // Helper function for delay
+            function delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            // Modified sendMessage function
+            async function sendMessage(message, retryCount = 0) {
                 if (!message.trim()) return;
 
                 displayMessage('user', message);
@@ -1752,17 +1804,18 @@
                 const loadingMessageDiv = document.createElement('div');
                 loadingMessageDiv.classList.add('chat-message', 'ai', 'loading-message');
                 loadingMessageDiv.innerHTML = `
-                    <div class="chat-avatar">&#x1F47E;</div> <!-- Changed AI avatar to 👾 -->
+                    <div class="chat-avatar">&#x1F47E;</div>
                     <div class="loading-spinner"></div>
                     <div class="chat-bubble">Thinking...</div>
                 `;
+
                 if (chatHistoryDiv) {
                     chatHistoryDiv.appendChild(loadingMessageDiv);
                     chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight;
                 }
 
                 try {
-                    // Construct the full prompt including context and history for Puter.js
+                    // Construct the prompt
                     let fullPromptForAI = portfolioContext + "\n\nConversation History:\n";
                     chatConversation.forEach(msg => {
                         if (msg.role === 'user') {
@@ -1771,18 +1824,49 @@
                             fullPromptForAI += `Artem AI: ${msg.content}\n`;
                         }
                     });
-                    fullPromptForAI += `User: ${message}\nArtem AI:`; // Prompt the AI to respond
+                    fullPromptForAI += `User: ${message}\nArtem AI:`;
 
-                    // Call puter.ai.chat
-                    // The 'model' parameter is optional but good practice to specify
-                    const aiResponseText = await puter.ai.chat(fullPromptForAI, { model: "gpt-4o" });
+                    // Try to get AI response
+                    const aiResponseText = await puter.ai.chat(fullPromptForAI, { 
+                        model: "gpt-4o",
+                        temperature: 0.7,
+                        max_tokens: 500
+                    });
 
-                    chatConversation.push({ role: 'assistant', content: aiResponseText });
-                    displayMessage('ai', aiResponseText);
+                    if (aiResponseText) {
+                        chatConversation.push({ role: 'assistant', content: aiResponseText });
+                        displayMessage('ai', aiResponseText);
+                    } else {
+                        throw new Error('Empty response received');
+                    }
 
                 } catch (error) {
-                    console.error('Error sending message to AI:', error);
-                    displayMessage('ai', 'Sorry, I am having trouble connecting to the AI. Please try again later.');
+                    console.error('AI Error:', error);
+
+                    // Check if we should retry
+                    if (retryCount < MAX_RETRIES) {
+                        console.log(`Retrying... Attempt ${retryCount + 1} of ${MAX_RETRIES}`);
+                        
+                        // Update loading message
+                        loadingMessageDiv.querySelector('.chat-bubble').textContent = 
+                            `Reconnecting... Attempt ${retryCount + 1}`;
+
+                        await delay(RETRY_DELAY);
+                        
+                        // Remove loading message before retry
+                        if (loadingMessageDiv.parentNode) {
+                            loadingMessageDiv.parentNode.removeChild(loadingMessageDiv);
+                        }
+                        
+                        // Retry the message
+                        return sendMessage(message, retryCount + 1);
+                    }
+
+                    // If all retries failed, show error message
+                    displayMessage('ai', 
+                        "I apologize, but I'm having trouble connecting at the moment. " +
+                        "Please try again in a few seconds, or refresh the page if the issue persists."
+                    );
                 } finally {
                     if (loadingMessageDiv.parentNode) {
                         loadingMessageDiv.parentNode.removeChild(loadingMessageDiv);
@@ -1792,6 +1876,34 @@
                     }
                 }
             }
+
+            // Add this to your DOMContentLoaded event listener
+            const skillQueries = {
+                'core-languages': "Tell me more about Artem's experience with Python, JavaScript, C++, C#, Java, and PHP. What are his strongest languages and how has he applied them in projects?",
+                'frontend': "Explain Artem's frontend development skills with React, Vue.js, and Next.js. What kind of projects has he built with these technologies?",
+                'backend': "Detail Artem's backend development experience with Node.js, Django, Flask, and Laravel. What type of systems has he built?",
+                'database': "What is Artem's experience with databases, particularly PostgreSQL and SQL? How has he used these in his projects?",
+                'data-science': "Tell me about Artem's data science and bioinformatics skills. How does he use NumPy, Pandas, and Matplotlib?",
+                'ai': "Explain Artem's experience with AI integration and machine learning. What projects has he worked on in this area?",
+                'tools': "What development tools does Artem use? How does he implement testing and version control?",
+                'management': "Tell me about Artem's project management experience and leadership skills. What methodologies does he use?"
+            };
+
+            // Add click event listeners to all skill info buttons
+            document.querySelectorAll('.skill-info-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const skillType = button.getAttribute('data-skill');
+                    const query = skillQueries[skillType];
+                    
+                    // Open the AI chat modal and send the query
+                    const aiChatModal = document.getElementById('ai-chat-modal');
+                    if (aiChatModal) {
+                        aiChatModal.classList.add('active');
+                        // Send the query to the AI
+                        sendMessage(query);
+                    }
+                });
+            });
 
             // Add this to your DOMContentLoaded event listener
             const funFacts = document.querySelectorAll('.fun-fact');
