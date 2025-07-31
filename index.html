@@ -265,6 +265,68 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Fun Facts Section */
+        .fun-facts-container {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .fun-facts-container h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .fun-fact-carousel {
+            position: relative;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .fun-fact {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            visibility: hidden;
+        }
+
+        .fun-fact.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .fun-fact-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .fun-fact-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
         /* Journey Section */
         .journey-timeline {
             position: relative;
@@ -906,6 +968,29 @@
                     </p>
                 </div>
             </div>
+            <!-- Fun Facts Section -->
+            <div class="fun-facts-container fade-in">
+                <h3>Did You Know? 🤔</h3>
+                <div class="fun-fact-carousel">
+                    <div class="fun-fact active">
+                        <span class="fun-fact-icon">🧬</span>
+                        <p>I combined Biology and Programming to create a Genomic Data Visualization Tool</p>
+                    </div>
+                    <div class="fun-fact">
+                        <span class="fun-fact-icon">🎲</span>
+                        <p>I'm a D&D enthusiast and incorporate creative storytelling in my projects</p>
+                    </div>
+                    <div class="fun-fact">
+                        <span class="fun-fact-icon">🎨</span>
+                        <p>I sketch UI designs in my notebook before coding them</p>
+                    </div>
+                    <div class="fun-fact">
+                        <span class="fun-fact-icon">🏃</span>
+                        <p>I love hiking and have explored many UK trails</p>
+                    </div>
+                </div>
+                <div class="fun-fact-dots"></div>
+            </div>
         </div>
     </section>
 
@@ -973,114 +1058,83 @@
         <div class="container">
             <h2 class="section-title fade-in">What I've Learned</h2>
             <div class="skills-grid">
+                <!-- Core Languages -->
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x1F40D;</div> <!-- 🐍 -->
-                    <h3>Python</h3>
-                    <p>Advanced Python programming for data analysis, bioinformatics tools, and backend development with FastAPI, Flask, and Django.</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="90%"></div>
-                    </div>
-                </div>
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x26A1;</div> <!-- ⚡ -->
-                    <h3>JavaScript (ES6+)</h3>
-                    <p>Modern JavaScript for front-end development, DOM manipulation, and creating interactive web applications, including React and Vue.js.</p>
+                    <div class="skill-icon">&#x1F4BB;</div> <!-- 💻 -->
+                    <h3>Core Languages</h3>
+                    <p>Python (90%), JavaScript/ES6+ (88%), C/C++ (85%), C# (82%), Java (80%), PHP (75%)</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="88%"></div>
                     </div>
                 </div>
+
+                <!-- Frontend Development -->
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x1F310;</div> <!-- 🌐 -->
-                    <h3>HTML5 & CSS3</h3>
-                    <p>Semantic markup, responsive design principles (Flexbox), modern CSS techniques, and creating beautiful, accessible user interfaces.</p>
+                    <div class="skill-icon">⚛️</div>
+                    <h3>Frontend Development</h3>
+                    <p>React, Vue.js, Next.js, HTML5, CSS3, FlexBox, Modern JavaScript</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="88%"></div>
                     </div>
                 </div>
+
+                <!-- Backend Development -->
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x1F5C4;</div> <!-- 🗄️ -->
-                    <h3>Database Management</h3>
-                    <p>Experience with SQL databases (PostgreSQL), SQLAlchemy ORM, and designing efficient database structures for scalable web applications.</p>
+                    <div class="skill-icon">🔄</div>
+                    <h3>Backend Development</h3>
+                    <p>Node.js, Django, Flask, Laravel, REST API Development</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="85%"></div>
                     </div>
                 </div>
+
+                <!-- Database & Data Management -->
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">&#x1F5C4;</div> <!-- 🗄️ -->
+                    <h3>Database & Data Management</h3>
+                    <p>PostgreSQL, SQL, SQLAlchemy ORM, Database Design</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="85%"></div>
+                    </div>
+                </div>
+
+                <!-- Data Science & Bioinformatics -->
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">&#x1F9EC;</div> <!-- 🧬 -->
+                    <h3>Data Science & Bioinformatics</h3>
+                    <p>NumPy, Pandas, Matplotlib, Genomics Data Analysis</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="85%"></div>
+                    </div>
+                </div>
+
+                <!-- AI & Machine Learning -->
                 <div class="skill-card fade-in">
                     <div class="skill-icon">&#x1F916;</div> <!-- 🤖 -->
                     <h3>AI Integration</h3>
-                    <p>Working with OpenAI APIs, developing AI-powered applications, and integrating machine learning capabilities into web solutions.</p>
+                    <p>OpenAI APIs, Machine Learning Integration, AI-Powered Systems</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="78%"></div>
                     </div>
                 </div>
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x1F5A5;</div> <!-- 🖥️ -->
-                    <h3>PHP & Laravel</h3>
-                    <p>Proficient in PHP 8+ and Laravel for robust API development and building complex backend systems.</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="75%"></div>
-                    </div>
-                </div>
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x1F9EC;</div> <!-- 🧬 -->
-                    <h3>Bioinformatics</h3>
-                    <p>Data visualization, algorithm implementation for biological datasets, and bridging biological science with technology.</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="85%"></div>
-                    </div>
-                </div>
 
+                <!-- Development Tools -->
                 <div class="skill-card fade-in">
-                    <div class="skill-icon">&#x1F4BB;</div> <!-- 💻 -->
-                    <h3>Programming Languages</h3>
-                    <p>Proficient in C/C++, C#, Java, and modern JavaScript (ES6+)</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="85%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">⚛️</div>
-                    <h3>Frontend Frameworks</h3>
-                    <p>React, Vue.js, and modern CSS techniques including FlexBox</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="88%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">🔄</div>
-                    <h3>Backend Technologies</h3>
-                    <p>Node.js, Django, Flask, PHP, Laravel, and REST API Development</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="85%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">📊</div>
-                    <h3>Data Science & Analysis</h3>
-                    <p>NumPy, Pandas, Matplotlib, and advanced data structures</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="82%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">🧪</div>
-                    <h3>Testing & Quality</h3>
-                    <p>Pytest, Unittest, and comprehensive unit testing practices</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" data-width="80%"></div>
-                    </div>
-                </div>
-
-                <div class="skill-card fade-in">
-                    <div class="skill-icon">🔄</div>
-                    <h3>Version Control</h3>
-                    <p>Git, GitHub, and collaborative development workflows</p>
+                    <div class="skill-icon">🛠️</div>
+                    <h3>Development Tools</h3>
+                    <p>Git, GitHub, Unit Testing (Pytest, Unittest), CI/CD</p>
                     <div class="progress-bar">
                         <div class="progress-fill" data-width="90%"></div>
+                    </div>
+                </div>
+
+                <!-- Project Management -->
+                <div class="skill-card fade-in">
+                    <div class="skill-icon">📊</div>
+                    <h3>Project Management</h3>
+                    <p>Team Leadership, Agile Methodologies, Technical Planning</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" data-width="85%"></div>
                     </div>
                 </div>
             </div>
@@ -1391,6 +1445,81 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
+            // Chat bot floating button
+            const chatBotButton = document.createElement('button');
+            chatBotButton.innerHTML = '&#x1F916;'; // Robot face emoji
+            chatBotButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                left: 20px;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #6366f1, #ec4899);
+                color: white;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                z-index: 1000;
+                box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+                padding: 0;
+                line-height: 50px;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            `;
+            
+            document.body.appendChild(chatBotButton);
+            
+            // Update the existing scroll event listener to include the chat bot button
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollTopButton.style.opacity = '1';
+                    scrollTopButton.style.visibility = 'visible';
+                    chatBotButton.style.opacity = '1';
+                    chatBotButton.style.visibility = 'visible';
+                } else {
+                    scrollTopButton.style.opacity = '0';
+                    scrollTopButton.style.visibility = 'hidden';
+                    chatBotButton.style.opacity = '0';
+                    chatBotButton.style.visibility = 'hidden';
+                }
+            });
+            
+            // Add click event listener to open the AI chat modal
+            chatBotButton.addEventListener('click', () => {
+                const aiChatModal = document.getElementById('ai-chat-modal');
+                const chatInput = document.getElementById('chat-input');
+                
+                if (aiChatModal && chatInput) {
+                    aiChatModal.classList.add('active');
+                    chatInput.focus();
+                    
+                    // Initial AI greeting - only if chat history is empty
+                    if (chatConversation.length === 0) {
+                        displayMessage('ai', "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!");
+                        chatConversation.push({ 
+                            role: 'assistant', 
+                            content: "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!" 
+                        });
+                    }
+                }
+            });
+
+            // Add hover effect
+            chatBotButton.addEventListener('mouseenter', () => {
+                chatBotButton.style.transform = 'scale(1.1)';
+            });
+
+            chatBotButton.addEventListener('mouseleave', () => {
+                chatBotButton.style.transform = 'scale(1)';
+            });
+
             // Preloader/Loader animation on page load
             const loader = document.createElement('div');
             loader.style.cssText = `
@@ -1569,7 +1698,7 @@
 
                  His core technical proficiencies include:
                  * **Programming Languages:** Python (90%), JavaScript/ES6+ (88%), C/C++ (85%), C# (82%), Java (80%), PHP (75%).
-                 * **Frontend Development:** HTML5, CSS3, ES6+, React, Vue.js, Next.js, FlexBox (88%).
+                 * **Frontend Development:** React, Vue.js, Next.js, HTML5, CSS3, FlexBox (88%).
                  * **Backend Development:** Node.js, Django, Flask, PHP, Laravel (85%).
                  * **Database Management:** PostgreSQL, SQL, SQLAlchemy (85%).
                  * **Data Science & Bioinformatics:** NumPy, Pandas, Matplotlib, Genomics, Bioinformatics (82-85%).
@@ -1659,6 +1788,39 @@
                     }
                 }
             }
+
+            // Add this to your DOMContentLoaded event listener
+            const funFacts = document.querySelectorAll('.fun-fact');
+            const dotsContainer = document.querySelector('.fun-fact-dots');
+            let currentFact = 0;
+
+            // Create dots
+            funFacts.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => showFact(index));
+                dotsContainer.appendChild(dot);
+            });
+
+            function showFact(index) {
+                funFacts.forEach(fact => {
+                    fact.classList.remove('active');
+                });
+                document.querySelectorAll('.dot').forEach(dot => {
+                    dot.classList.remove('active');
+                });
+                
+                funFacts[index].classList.add('active');
+                document.querySelectorAll('.dot')[index].classList.add('active');
+                currentFact = index;
+            }
+
+            // Auto-rotate facts
+            setInterval(() => {
+                currentFact = (currentFact + 1) % funFacts.length;
+                showFact(currentFact);
+            }, 5000);
 
             // Event listener for opening the modal
             if (openAIChatBtn && aiChatModal && chatInput) {
