@@ -506,8 +506,6 @@
             font-size: 0.8rem;
         }
 
-        /* Removed .generate-description-btn and .project-description-full styles as they are no longer needed */
-
         /* Contact Section */
         .contact-content {
             text-align: center;
@@ -539,6 +537,103 @@
             background: var(--gradient);
             transform: translateY(-2px);
         }
+        /* Styles for the contact form */
+        .contact-form {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: left;
+            min-width: 300px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--bg-light);
+            background: var(--bg-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .submit-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 1rem;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+        .contact-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 3rem;
+        margin-top: 2rem;
+        }
+
+        .contact-links {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        max-width: 300px;
+        }
+
+        .contact-form {
+        flex: 2;
+        }
+
+        /* Responsive stack on mobile */
+        @media (max-width: 768px) {
+        .contact-wrapper {
+            flex-direction: column;
+        }
+
+        .contact-links {
+            max-width: 100%;
+            align-items: center;
+        }
+
+        .contact-form {
+            width: 100%;
+        }
+        }
+
 
         /* Footer */
         footer {
@@ -560,6 +655,7 @@
         .github-link:hover {
             color: var(--secondary);
         }
+        
 
         /* Animations */
         @keyframes fadeInUp {
@@ -1142,6 +1238,7 @@
             <div class="cta-buttons-container">
                 <a href="#about" class="cta-button">Discover My Journey</a>
                 <button id="open-ai-chat-btn" class="cta-button secondary-button">Ask Artem AI</button>
+                <a href="assets/Artem_Sakhniuk_CV.pdf" download="Artem_Sakhniuk_CV.pdf" class="cta-button secondary-button">Download CV</a>
             </div>
         </div>
     </section>
@@ -1150,9 +1247,9 @@
         <div class="container">
             <h2 class="section-title fade-in">About Me</h2>
             <div class="about-content">
-                <div class="about-image fade-in">
-                    <div class="profile-pic">&#x1F469;&#x200D;&#x1F4BB;</div> <!-- 👩‍💻 -->
-                </div>
+                    <div class="about-image fade-in">
+                        <img src="assets/IMG_3564.JPG" alt="Artem Sakhniuk professional headshot" class="profile-pic">
+                    </div>
                 <div class="about-text fade-in">
                     <p>
                         Hi! I'm Artem Sakhniuk, a passionate and detail-oriented Full-Stack Web Developer based in the UK.
@@ -1409,30 +1506,47 @@
     </section>
 
     <section id="contact">
-        <div class="container">
-            <h2 class="section-title fade-in">Let's Connect</h2>
-            <div class="contact-content fade-in">
-                <p>
-                    I'm currently based in the UK and working as a Full-Stack Web Developer at The Code Registry.
-                    I am always eager to discuss new opportunities, potential collaborations, or exciting projects within the UK.
-                    My blend of bioinformatics insight and robust web development skills allows me to approach challenges with a fresh and analytical perspective.
-                </p>
-                <div class="contact-links">
-                    <a href="mailto:artemsakhnyuk33@gmail.com" class="contact-link">
-                        &#x1F4E7; Email Me <!-- 📧 -->
-                    </a>
-                    <a href="https://www.linkedin.com/in/artem-sakhniuk-0851b4231/" class="contact-link" target="_blank">
-                        &#x1F4BC; LinkedIn <!-- 💼 -->
-                    </a>
-                    <a href="https://github.com/NanoGraf31415926535" class="contact-link" target="_blank">
-                        &#x1F419; GitHub <!-- 🐙 -->
-                    </a>
-                    <a href="tel:+447846481665" class="contact-link">
-                        &#x1F4F1; Call Me <!-- 📱 -->
-                    </a>
-                </div>
-            </div>
+    <div class="container">
+        <h2 class="section-title fade-in">Let's Connect</h2>
+        <div class="contact-wrapper fade-in">
+        <!-- Left side: contact links -->
+        <div class="contact-links">
+            <a href="mailto:artemsakhnyuk33@gmail.com" class="contact-link">
+            &#x1F4E7; Email Me
+            </a>
+            <a href="https://www.linkedin.com/in/artem-sakhniuk-0851b4231/" class="contact-link" target="_blank">
+            &#x1F4BC; LinkedIn
+            </a>
+            <a href="https://github.com/NanoGraf31415926535" class="contact-link" target="_blank">
+            &#x1F419; GitHub
+            </a>
+            <a href="tel:+447846481665" class="contact-link">
+            &#x1F4F1; Call Me
+            </a>
         </div>
+
+        <!-- Right side: contact form -->
+        <form id="contact-form" class="contact-form fade-in" action="https://formspree.io/f//movlgnaa" method="POST">
+            <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+        </div>
+    </div>
     </section>
 
     <!-- Footer -->
