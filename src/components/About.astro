@@ -1,0 +1,52 @@
+---
+import { profile } from "@/data/profile";
+---
+
+<section id="about" class="py-24 bg-[var(--color-bg-secondary)]">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="gradient-text text-4xl sm:text-5xl font-bold text-center mb-16 fade-in-section">
+      About Me
+    </h2>
+
+    <div class="grid md:grid-cols-[300px_1fr] gap-12 items-center">
+      <div class="fade-in-section flex justify-center">
+        <div class="relative">
+          <img
+            src={profile.headshotPath}
+            alt="Artem Sakhniuk professional headshot"
+            class="w-64 h-64 sm:w-72 sm:h-72 rounded-full object-cover shadow-xl"
+            loading="lazy"
+          />
+          <div
+            class="absolute inset-0 rounded-full gradient-border"
+            aria-hidden="true"
+          ></div>
+        </div>
+      </div>
+
+      <div class="fade-in-section space-y-5">
+        {profile.about.map((paragraph) => (
+          <p class="text-[var(--color-text-secondary)] leading-relaxed text-base sm:text-lg">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Fade-in observer
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+  );
+
+  document.querySelectorAll(".fade-in-section").forEach((el) => observer.observe(el));
+</script>

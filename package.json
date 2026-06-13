@@ -1,0 +1,25 @@
+{
+  "name": "artem-sakhniuk.github.io",
+  "type": "module",
+  "version": "2.0.0",
+  "description": "Artem Sakhniuk - Full-Stack Web Developer Portfolio",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^5.0.0",
+    "tailwindcss": "^4.0.0",
+    "three": "^0.170.0",
+    "typescript": "^5.6.0"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.0",
+    "@types/three": "^0.184.1",
+    "astro-icon": "^1.1.0"
+  }
+}

@@ -1,0 +1,75 @@
+---
+import { timeline } from "@/data/timeline";
+---
+
+<section id="journey" class="py-24 bg-[var(--color-bg-main)]">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="gradient-text text-4xl sm:text-5xl font-bold text-center mb-16 fade-in-section">
+      My Development Journey
+    </h2>
+
+    <div class="relative">
+      <!-- Timeline line -->
+      <div
+        class="absolute left-4 sm:left-8 top-0 bottom-0 w-0.5 hidden sm:block"
+        class:list={["bg-[var(--color-border-light)]"]}
+      ></div>
+
+      <div class="space-y-10">
+        {timeline.map((item) => (
+          <div class="timeline-item fade-in-section relative pl-12 sm:pl-24">
+            <!-- Dot -->
+            <div
+              class="absolute left-2 sm:left-4 top-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold gradient-bg shadow-lg -translate-x-1/2 z-10"
+            >
+              {item.id}
+            </div>
+
+            <!-- Content -->
+            <div
+              class="p-6 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+              class:list={[
+                "bg-[var(--color-card-bg)] shadow-lg shadow-[var(--color-card-shadow)]",
+              ]}
+            >
+              <span
+                class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3"
+                class:list={[
+                  "bg-[var(--color-primary)]/10 text-[var(--color-primary)]",
+                ]}
+              >
+                {item.period}
+              </span>
+              <h3 class="text-xl font-bold text-[var(--color-primary)] mb-2">
+                {item.title}
+              </h3>
+              <p class="text-[var(--color-text-secondary)] leading-relaxed">
+                {item.description}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+  );
+
+  document
+    .querySelectorAll(".timeline-item")
+    .forEach((el, i) => {
+      (el as HTMLElement).style.transitionDelay = `${i * 0.1}s`;
+      observer.observe(el);
+    });
+</script>

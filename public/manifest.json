@@ -1,0 +1,21 @@
+{
+  "name": "Artem Sakhniuk - Full-Stack Web Developer",
+  "short_name": "Artem Sakhniuk",
+  "description": "Full-Stack Web Developer portfolio showcasing skills, projects, and experience.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/assets/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/assets/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

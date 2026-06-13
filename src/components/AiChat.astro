@@ -1,0 +1,369 @@
+---
+import { Icon } from "astro-icon/components";
+import { faq } from "@/data/faq";
+---
+
+<!-- Floating Chat Button -->
+<button
+  id="chat-fab"
+  class="fixed bottom-6 left-6 z-40 w-14 h-14 rounded-full shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
+  class:list={["gradient-bg text-white"]}
+  aria-label="Open AI Chat"
+>
+  <Icon name="lucide:bot" class="w-7 h-7 mx-auto" />
+</button>
+
+<!-- Chat Modal -->
+<div
+  id="ai-chat-modal"
+  class="fixed inset-0 z-50 flex items-end sm:items-center justify-center hidden"
+>
+  <!-- Overlay -->
+  <div
+    id="chat-overlay"
+    class="absolute inset-0 bg-black/60 backdrop-blur-sm"
+  ></div>
+
+  <!-- Modal Content -->
+  <div
+    class="relative w-full sm:max-w-lg sm:mx-4 rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col"
+    class:list={["bg-[var(--color-bg-main)]"]}
+  >
+    <!-- Header -->
+    <div
+      class="flex items-center justify-between p-4 border-b"
+      class:list={["border-[var(--color-border-light)]"]}
+    >
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center">
+          <Icon name="lucide:bot" class="w-5 h-5 text-white" />
+        </div>
+        <div>
+          <h3 class="font-semibold text-[var(--color-text-primary)]">
+            Ask Artem AI
+          </h3>
+          <p class="text-xs text-[var(--color-text-tertiary)]">
+            Powered by AI
+          </p>
+        </div>
+      </div>
+      <button
+        id="chat-close-btn"
+        class="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
+        class:list={[
+          "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
+        ]}
+        aria-label="Close chat"
+      >
+        <Icon name="lucide:x" class="w-5 h-5" />
+      </button>
+    </div>
+
+    <!-- Premade Prompts -->
+    <div
+      class="flex gap-2 p-4 overflow-x-auto scrollbar-none border-b"
+      class:list={["border-[var(--color-border-light)]"]}
+    >
+      {faq.map((item) => (
+        <button
+          class="premade-btn px-4 py-2 text-sm rounded-full whitespace-nowrap transition-all duration-200 flex-shrink-0 cursor-pointer"
+          class:list={[
+            "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-white",
+          ]}
+        >
+          {item.question}
+        </button>
+      ))}
+    </div>
+
+    <!-- Chat History -->
+    <div
+      id="chat-history"
+      class="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] max-h-[50vh] scroll-smooth"
+    >
+      <!-- Messages injected here -->
+    </div>
+
+    <!-- Input -->
+    <div
+      class="p-4 border-t"
+      class:list={["border-[var(--color-border-light)]"]}
+    >
+      <div class="flex gap-3">
+        <textarea
+          id="chat-input"
+          rows={1}
+          placeholder="Ask me anything..."
+          class="flex-1 px-4 py-3 rounded-xl border resize-none outline-none transition-colors duration-200 max-h-24"
+          class:list={[
+            "bg-[var(--color-bg-main)] border-[var(--color-border-light)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:border-[var(--color-primary)]",
+          ]}
+        ></textarea>
+        <button
+          id="chat-send-btn"
+          class="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 flex-shrink-0 cursor-pointer"
+          class:list={[
+            "gradient-bg text-white hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed",
+          ]}
+          disabled
+          aria-label="Send message"
+        >
+          <Icon name="lucide:send" class="w-5 h-5" />
+        </button>
+      </div>
+      <p id="chat-status" class="text-xs text-[var(--color-text-tertiary)] mt-2 text-center hidden">
+        Using offline FAQ mode
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { faq } from "@/data/faq";
+
+  // --- State ---
+  const modal = document.getElementById("ai-chat-modal")!;
+  const overlay = document.getElementById("chat-overlay")!;
+  const fab = document.getElementById("chat-fab")!;
+  const closeBtn = document.getElementById("chat-close-btn")!;
+  const history = document.getElementById("chat-history")!;
+  const input = document.getElementById("chat-input") as HTMLTextAreaElement;
+  const sendBtn = document.getElementById("chat-send-btn") as HTMLButtonElement;
+  const status = document.getElementById("chat-status")!;
+  const premadeBtns = document.querySelectorAll(".premade-btn");
+
+  let conversation: { role: "user" | "assistant"; content: string }[] = [];
+  let useFallback = false;
+
+  // --- Context ---
+  const portfolioContext = `
+**Role:** You are Artem Sakhniuk's professional AI assistant. Provide concise, accurate, professional information about Artem's skills and experience as a Full-Stack Web Developer.
+
+**Profile:**
+Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioinformatics. He holds full rights to work in the UK. He holds a Bachelor of Biology with a specialization in Bioinformatics from Taras Shevchenko National University (3.9 GPA).
+
+**Core Expertise:**
+* **Full-Stack Development:** React, Vue.js, Angular, Next.js (frontend); Node.js, Django, Flask, FastAPI, Laravel (backend).
+* **Languages:** Python (strongest), JavaScript/ES6+, TypeScript, PHP, C++, C#, Java.
+* **Database:** PostgreSQL, SQL, SQLAlchemy.
+* **Data Science:** NumPy, Pandas, Matplotlib, Machine Learning, Bioinformatics.
+* **DevOps:** Git, Docker, CI/CD, Pytest, Agile.
+
+**Professional Experience:**
+1. **Ruth Miskin Training (Oct 2025 - Present):** Full Stack Software Developer. Building educational platform with Flask + React. Increased course completion rates by 25%.
+2. **The Code Registry (Jun 2025 - Oct 2026):** Full Stack Web Developer. Architected Django + Angular platform supporting 10K+ users. Implemented CI/CD reducing deployment time by 50%.
+3. **Freelance (Aug 2025 - Sep 2025):** Full Stack AI Developer. Built AI-driven web app with ML personalization for client Lukas Emanuel Holz.
+4. **Goethe University (Jun 2024 - Jun 2025):** Web Developer Full-Stack. Led AI-Powered Interviewer System using Python + OpenAI API. Achieved 90% client satisfaction.
+5. **Capstone (Oct 2022 - Aug 2023):** Python Developer. Built genomic data visualization tool with Flask.
+
+**Format:** Use conversational, narrative-driven paragraphs. Do not use bullet lists in responses about skills or summaries.
+
+**Constraint:** Only answer based on the provided information. Do not fabricate.
+`;
+
+  // --- Functions ---
+  function addMessage(role: "user" | "assistant", text: string) {
+    const div = document.createElement("div");
+    div.className = `flex gap-3 ${role === "user" ? "justify-end" : ""}`;
+
+    if (role === "assistant") {
+      div.innerHTML = `
+        <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center flex-shrink-0">
+          <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a10 10 0 0110 10c0 1.5-.3 2.9-.9 4.2l1.4 4.3-4.3-1.4A10 10 0 1112 2z"/>
+          </svg>
+        </div>
+        <div class="max-w-[80%] px-4 py-2.5 rounded-2xl bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)]">
+          ${text}
+        </div>
+      `;
+    } else {
+      div.innerHTML = `
+        <div class="max-w-[80%] px-4 py-2.5 rounded-2xl gradient-bg text-white">
+          ${text}
+        </div>
+        <div class="w-8 h-8 rounded-full bg-[var(--color-bg-tertiary)] flex items-center justify-center flex-shrink-0">
+          <svg class="w-4 h-4 text-[var(--color-text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+      `;
+    }
+
+    history.appendChild(div);
+    history.scrollTop = history.scrollHeight;
+  }
+
+  function addLoading() {
+    const div = document.createElement("div");
+    div.id = "chat-loading";
+    div.className = "flex gap-3";
+    div.innerHTML = `
+      <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center flex-shrink-0">
+        <svg class="w-4 h-4 text-white animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12a9 9 0 11-6.2-8.6"/>
+        </svg>
+      </div>
+      <div class="px-4 py-2.5 rounded-2xl bg-[var(--color-bg-tertiary)] text-[var(--color-text-tertiary)] italic">
+        Thinking...
+      </div>
+    `;
+    history.appendChild(div);
+    history.scrollTop = history.scrollHeight;
+  }
+
+  function removeLoading() {
+    const el = document.getElementById("chat-loading");
+    if (el) el.remove();
+  }
+
+  // FAQ fallback matching
+  function getFaqAnswer(query: string): string | null {
+    const q = query.toLowerCase();
+    for (const item of faq) {
+      const keywords = item.question.toLowerCase();
+      // Simple keyword matching
+      const qWords = q.split(/\s+/);
+      const matchCount = qWords.filter((w) => keywords.includes(w) && w.length > 3).length;
+      if (matchCount >= 2) return item.answer;
+    }
+    return null;
+  }
+
+  async function sendMessage(message: string) {
+    if (!message.trim()) return;
+
+    addMessage("user", message);
+    conversation.push({ role: "user", content: message });
+    input.value = "";
+    sendBtn.disabled = true;
+
+    addLoading();
+
+    try {
+      if (useFallback) {
+        // Use FAQ fallback
+        const answer = getFaqAnswer(message) || "I'm sorry, I don't have an answer for that. Please try asking about Artem's skills, projects, or experience.";
+        await new Promise((r) => setTimeout(r, 500));
+        removeLoading();
+        addMessage("assistant", answer);
+        conversation.push({ role: "assistant", content: answer });
+      } else {
+        // Try Puter.js
+        const fullPrompt =
+          portfolioContext +
+          "\n\nConversation History:\n" +
+          conversation
+            .map((m) => `${m.role === "user" ? "User" : "Artem AI"}: ${m.content}`)
+            .join("\n") +
+          `\nUser: ${message}\nArtem AI:`;
+
+        const response = await puter.ai.chat(fullPrompt, {
+          model: "gpt-4o",
+          temperature: 0.7,
+          max_tokens: 500,
+        });
+
+        removeLoading();
+
+        if (response) {
+          addMessage("assistant", response);
+          conversation.push({ role: "assistant", content: response });
+        } else {
+          throw new Error("Empty response");
+        }
+      }
+    } catch {
+      removeLoading();
+
+      if (!useFallback) {
+        // Fallback to FAQ mode
+        useFallback = true;
+        status.classList.remove("hidden");
+        status.textContent = "AI service unavailable. Using offline FAQ mode.";
+
+        const answer = getFaqAnswer(message) || "I'm sorry, I don't have an answer for that. Please try asking about Artem's skills, projects, or experience.";
+        addMessage("assistant", answer);
+        conversation.push({ role: "assistant", content: answer });
+      } else {
+        addMessage(
+          "assistant",
+          "I apologize, but I'm having trouble connecting. Please try again in a moment."
+        );
+      }
+    }
+
+    sendBtn.disabled = false;
+    input.focus();
+  }
+
+  // --- Event Listeners ---
+  fab.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    input.focus();
+
+    if (conversation.length === 0) {
+      const greeting = "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!";
+      addMessage("assistant", greeting);
+      conversation.push({ role: "assistant", content: greeting });
+    }
+  });
+
+  const closeModal = () => {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  };
+
+  overlay.addEventListener("click", closeModal);
+  closeBtn.addEventListener("click", closeModal);
+
+  sendBtn.addEventListener("click", () => sendMessage(input.value));
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage(input.value);
+    }
+  });
+
+  input.addEventListener("input", () => {
+    sendBtn.disabled = !input.value.trim();
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 96) + "px";
+  });
+
+  premadeBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sendMessage(btn.textContent!.trim());
+    });
+  });
+
+  // Handle "Learn More" skill queries
+  modal.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const skillBtn = target.closest(".skill-info-btn");
+    if (skillBtn) {
+      const skillType = skillBtn.getAttribute("data-skill");
+      const queries: Record<string, string> = {
+        "core-languages": "Tell me more about Artem's experience with Python, JavaScript, C++, C#, Java, and PHP.",
+        frontend: "Explain Artem's frontend development skills with React, Vue.js, and Next.js.",
+        backend: "Detail Artem's backend development experience with Node.js, Django, Flask, and Laravel.",
+        database: "What is Artem's experience with PostgreSQL and database design?",
+        "data-science": "Tell me about Artem's data science and bioinformatics skills.",
+        ai: "Explain Artem's experience with AI integration and machine learning.",
+        tools: "What development tools does Artem use?",
+        management: "Tell me about Artem's project management experience.",
+      };
+      const query = queries[skillType || ""];
+      if (query) sendMessage(query);
+    }
+  });
+
+  // Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+      closeModal();
+    }
+  });
+</script>

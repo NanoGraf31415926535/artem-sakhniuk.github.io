@@ -1,0 +1,100 @@
+---
+import type { Skill } from "@/data/skills";
+import { Icon } from "astro-icon/components";
+
+export interface Props {
+  skill: Skill;
+}
+
+const { skill } = Astro.props;
+---
+
+<div
+  class="skill-card fade-in-section p-6 rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 group cursor-default"
+  class:list={["bg-[var(--color-card-bg)] shadow-lg shadow-[var(--color-card-shadow)]"]}
+>
+  <Icon
+    name={skill.icon}
+    class="w-10 h-10 mb-4 text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110"
+  />
+
+  <h3 class="text-lg font-bold text-[var(--color-primary)] mb-2">
+    {skill.title}
+  </h3>
+
+  <p class="text-sm text-[var(--color-text-secondary)] mb-4 leading-relaxed">
+    {skill.description}
+  </p>
+
+  <!-- Progress bar -->
+  <div class="w-full h-1.5 rounded-full overflow-hidden mb-4 bg-[var(--color-bg-tertiary)]">
+    <div
+      class="progress-fill h-full rounded-full gradient-bg transition-all duration-1000 ease-out"
+      style="width: 0%"
+      data-width={skill.percentage}
+    ></div>
+  </div>
+
+  <button
+    class="skill-info-btn mt-2 px-4 py-2 text-sm rounded-full font-medium border transition-all duration-200 cursor-pointer"
+    class:list={[
+      "border-[var(--color-primary)] text-[var(--color-primary)] hover:gradient-bg hover:text-white hover:border-transparent",
+    ]}
+    data-skill={skill.id}
+  >
+    Learn More
+  </button>
+</div>
+
+<script>
+  // Progress bar animation
+  const progressObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const fill = entry.target.querySelector(".progress-fill") as HTMLElement;
+          if (fill) {
+            const width = fill.getAttribute("data-width");
+            setTimeout(() => {
+              fill.style.width = width + "%";
+            }, 200);
+          }
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  document
+    .querySelectorAll(".skill-card")
+    .forEach((card) => progressObserver.observe(card));
+
+  // Skill info button → open AI chat
+  document.querySelectorAll(".skill-info-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const skillType = btn.getAttribute("data-skill");
+      const modal = document.getElementById("ai-chat-modal");
+      if (modal) {
+        modal.classList.add("active");
+        modal.classList.remove("hidden");
+        modal.setAttribute("data-pending-skill", skillType || "");
+      }
+    });
+  });
+
+  // Fade-in for skill cards
+  const fadeObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document
+    .querySelectorAll(".skill-card.fade-in-section")
+    .forEach((el) => fadeObserver.observe(el));
+</script>

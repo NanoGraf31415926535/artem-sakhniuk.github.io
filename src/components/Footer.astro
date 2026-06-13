@@ -1,0 +1,29 @@
+---
+import { profile } from "@/data/profile";
+import { Icon } from "astro-icon/components";
+---
+
+<footer
+  class="py-8 text-center border-t"
+  class:list={[
+    "bg-[var(--color-bg-main)] border-[var(--color-border-light)]",
+  ]}
+>
+  <div class="max-w-6xl mx-auto px-4">
+    <p class="text-sm text-[var(--color-text-tertiary)] mb-3">
+      &copy; {new Date().getFullYear()} {profile.name}. Built with passion and modern web technologies.
+    </p>
+    <a
+      href={profile.repo}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200"
+      class:list={[
+        "text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]",
+      ]}
+    >
+      <Icon name="lucide:external-link" class="w-4 h-4" />
+      View Source Code on GitHub
+    </a>
+  </div>
+</footer>

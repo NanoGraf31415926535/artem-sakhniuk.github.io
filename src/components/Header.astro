@@ -1,0 +1,157 @@
+---
+import { profile } from "@/data/profile";
+import { Icon } from "astro-icon/components";
+---
+
+<header
+  id="header"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+>
+  <div
+    class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16"
+  >
+    <a href="#" class="gradient-text text-xl font-bold tracking-tight">
+      {profile.name}
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8">
+      {["Home", "About", "Journey", "Skills", "Projects", "Contact"].map(
+        (item) => (
+          <a
+            href={item === "Home" ? "#" : `#${item.toLowerCase()}`}
+            class="text-sm font-medium transition-colors duration-200"
+            class:list={[
+              "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+            ]}
+          >
+            {item}
+          </a>
+        )
+      )}
+
+      <!-- Theme Toggle -->
+      <button
+        id="theme-toggle"
+        class="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
+        class:list={[
+          "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
+        ]}
+        aria-label="Toggle theme"
+      >
+        <Icon name="lucide:sun" class="w-5 h-5 hidden dark:block" />
+        <Icon name="lucide:moon" class="w-5 h-5 block dark:hidden" />
+      </button>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <div class="flex md:hidden items-center gap-3">
+      <button
+        id="theme-toggle-mobile"
+        class="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
+        class:list={[
+          "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
+        ]}
+        aria-label="Toggle theme"
+      >
+        <Icon name="lucide:sun" class="w-5 h-5 hidden dark:block" />
+        <Icon name="lucide:moon" class="w-5 h-5 block dark:hidden" />
+      </button>
+      <button
+        id="mobile-menu-btn"
+        class="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
+        class:list={[
+          "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
+        ]}
+        aria-label="Open menu"
+      >
+        <Icon name="lucide:menu" class="w-6 h-6" />
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="md:hidden fixed inset-0 z-40 bg-[var(--color-bg-main)] translate-x-full transition-transform duration-300"
+  >
+    <div class="flex justify-end p-4">
+      <button
+        id="mobile-menu-close"
+        class="p-2 rounded-lg cursor-pointer"
+        class:list={[
+          "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+        ]}
+        aria-label="Close menu"
+      >
+        <Icon name="lucide:x" class="w-6 h-6" />
+      </button>
+    </div>
+    <nav class="flex flex-col items-center gap-6 mt-12">
+      {["Home", "About", "Journey", "Skills", "Projects", "Contact"].map(
+        (item) => (
+          <a
+            href={item === "Home" ? "#" : `#${item.toLowerCase()}`}
+            class="text-lg font-medium transition-colors duration-200"
+            class:list={[
+              "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+            ]}
+          >
+            {item}
+          </a>
+        )
+      )}
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("header")!;
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+      header.style.backgroundColor = "var(--color-bg-main)";
+      header.style.borderBottom = "1px solid var(--color-border-light)";
+    } else {
+      header.style.backgroundColor = "transparent";
+      header.style.borderBottom = "none";
+    }
+  });
+
+  const toggleTheme = (btn?: HTMLElement) => {
+    const html = document.documentElement;
+    const isDark = html.classList.contains("dark");
+    html.classList.toggle("dark", !isDark);
+    localStorage.setItem("theme", !isDark ? "dark" : "light");
+    if (btn) {
+      btn
+        .querySelectorAll("svg")
+        .forEach((svg) => svg.classList.toggle("hidden"));
+    }
+  };
+
+  document.getElementById("theme-toggle")?.addEventListener("click", (e) => {
+    toggleTheme(e.currentTarget as HTMLElement);
+  });
+  document
+    .getElementById("theme-toggle-mobile")
+    ?.addEventListener("click", (e) => {
+      toggleTheme(e.currentTarget as HTMLElement);
+    });
+
+  // Mobile menu
+  const mobileMenu = document.getElementById("mobile-menu")!;
+  document.getElementById("mobile-menu-btn")?.addEventListener("click", () => {
+    mobileMenu.classList.remove("translate-x-full");
+  });
+  document
+    .getElementById("mobile-menu-close")
+    ?.addEventListener("click", () => {
+      mobileMenu.classList.add("translate-x-full");
+    });
+  mobileMenu.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", () => {
+      mobileMenu.classList.add("translate-x-full");
+    });
+  });
+</script>

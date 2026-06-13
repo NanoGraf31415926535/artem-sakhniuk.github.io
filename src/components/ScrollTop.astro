@@ -1,0 +1,33 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<button
+  id="scroll-top-btn"
+  class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
+  class:list={[
+    "gradient-bg text-white",
+    "opacity-0 invisible translate-y-4",
+  ]}
+  aria-label="Scroll to top"
+>
+  <Icon name="lucide:arrow-up" class="w-5 h-5 mx-auto" />
+</button>
+
+<script>
+  const btn = document.getElementById("scroll-top-btn")!;
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      btn.classList.remove("opacity-0", "invisible", "translate-y-4");
+      btn.classList.add("opacity-100", "visible", "translate-y-0");
+    } else {
+      btn.classList.add("opacity-0", "invisible", "translate-y-4");
+      btn.classList.remove("opacity-100", "visible", "translate-y-0");
+    }
+  });
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>

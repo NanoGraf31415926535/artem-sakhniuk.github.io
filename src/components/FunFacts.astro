@@ -1,0 +1,80 @@
+---
+import { funFacts } from "@/data/funFacts";
+import { Icon } from "astro-icon/components";
+---
+
+<div class="max-w-2xl mx-auto mt-12 fade-in-section">
+  <div
+    class="p-8 rounded-2xl text-center"
+    class:list={[
+      "bg-[var(--color-card-bg)] shadow-lg shadow-[var(--color-card-shadow)]",
+    ]}
+  >
+    <h3 class="text-xl font-bold text-[var(--color-primary)] mb-6">
+      Did You Know?
+    </h3>
+
+    <div class="relative h-24 overflow-hidden" id="fun-fact-carousel">
+      {funFacts.map((fact, i) => (
+        <div
+          class="fun-fact absolute inset-0 flex flex-col items-center justify-center transition-all duration-500"
+          class:list={[
+            "opacity-0 translate-y-4",
+            i === 0 && "opacity-100 translate-y-0",
+          ]}
+        >
+          <Icon
+            name={fact.icon}
+            class="w-8 h-8 text-[var(--color-primary)] mb-2"
+          />
+          <p class="text-[var(--color-text-secondary)]">{fact.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <div class="flex justify-center gap-2 mt-4" id="fun-fact-dots">
+      {funFacts.map((_, i) => (
+        <button
+          class="w-2 h-2 rounded-full transition-all duration-300 cursor-pointer"
+          class:list={[
+            i === 0
+              ? "bg-[var(--color-primary)] scale-125"
+              : "bg-[var(--color-text-tertiary)]",
+          ]}
+          data-index={i}
+        ></button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  const facts = document.querySelectorAll(".fun-fact");
+  const dots = document.querySelectorAll("#fun-fact-dots button");
+  let current = 0;
+
+  const showFact = (index: number) => {
+    facts.forEach((f, i) => {
+      f.classList.toggle("opacity-100", i === index);
+      f.classList.toggle("translate-y-0", i === index);
+      f.classList.toggle("opacity-0", i !== index);
+      f.classList.toggle("translate-y-4", i !== index);
+    });
+    dots.forEach((d, i) => {
+      d.classList.toggle("bg-[var(--color-primary)]", i === index);
+      d.classList.toggle("scale-125", i === index);
+      d.classList.toggle("bg-[var(--color-text-tertiary)]", i !== index);
+    });
+    current = index;
+  };
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      showFact(parseInt(dot.getAttribute("data-index")!));
+    });
+  });
+
+  setInterval(() => {
+    showFact((current + 1) % facts.length);
+  }, 5000);
+</script>
