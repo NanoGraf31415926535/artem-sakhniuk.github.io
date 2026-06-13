@@ -1,36 +1,41 @@
-# My Portfolio Website
+# Artem Sakhniuk — Portfolio
 
-## 🚀 Overview
+Personal landing page and CV website, built with **Astro 5**, **TypeScript**, and **Tailwind CSS v4**.
 
-This project provides a sleek and responsive portfolio template for founders and coders to showcase my work.
+## Tech Stack
 
------
+- **Astro 5** — Static site generation
+- **TypeScript** — Type safety
+- **Tailwind CSS v4** — Utility-first styling
+- **Three.js** — 3D interactive background
+- **Lucide Icons** — SVG icon system
+- **Puter.js** — AI chat integration
 
-## ✨ Features
+## Project Structure
 
-* *Responsive design for all devices.*
-* *Smooth scrolling navigation.*
-* *Interactive project gallery.*
+```
+src/
+├── components/    # Astro components (Header, Hero, Skills, etc.)
+├── data/          # Structured data from CV (profile, skills, timeline)
+├── layouts/       # BaseLayout (SEO, theme, fonts)
+├── pages/         # index.astro
+└── styles/        # global.css (Tailwind v4)
+public/            # Static assets (PDF, images, PWA files)
+```
 
-## 🖥️ Technologies Used
+## Development
 
-* HTML5, CSS3, JavaScript
+```bash
+nvm use
+npm run dev      # Start dev server with HMR
+npm run build    # Production build → dist/
+npm run preview  # Preview production build
+```
 
-## 🚀 Usage (for GitHub Pages)
+## Deployment
 
-This project is designed to be hosted effortlessly on **GitHub Pages**.
+Push to `main` — the GitHub Actions workflow at `.github/workflows/deploy.yml` automatically builds and deploys to GitHub Pages.
 
-## 🌐 Live Demo / Deployed Link
+## Live Site
 
-  * [View Live Demo](https://nanograf31415926535.github.io/artem-sakhniuk.github.io/)
------
-
-## 🤝 Contributing
-
-Contributions are always welcome\! If you have suggestions or want to contribute, please:
-
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/AmazingFeature`).
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4.  Push to the branch (`git push origin feature/AmazingFeature`).
-5.  Open a Pull Request.
+https://nanograf31415926535.github.io/artem-sakhniuk.github.io/

@@ -1,7 +1,10 @@
-const CACHE_NAME = "artem-portfolio-v1";
+const CACHE_NAME = "artem-portfolio-v2";
+
+const BASE = self.location.pathname.replace(/\/sw\.js$/, "");
+
 const urlsToCache = [
-  "/",
-  "/manifest.json",
+  BASE + "/",
+  BASE + "/manifest.json",
 ];
 
 self.addEventListener("install", (event) => {

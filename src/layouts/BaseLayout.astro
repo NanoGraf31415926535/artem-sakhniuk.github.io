@@ -8,8 +8,9 @@ const { title, description } = Astro.props as {
 };
 
 const pageTitle = title || `${profile.name} - ${profile.title}`;
-const pageDescription =
-  description || profile.summary;
+const pageDescription = description || profile.summary;
+const basePath = profile.base;
+const siteUrl = `${Astro.site?.origin}${basePath}`;
 ---
 
 <!DOCTYPE html>
@@ -25,8 +26,8 @@ const pageDescription =
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.site?.href} />
-    <meta property="og:image" content={`${Astro.site?.href}assets/og-image.png`} />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:image" content={`${siteUrl}/assets/og-image.png`} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -34,8 +35,9 @@ const pageDescription =
     <meta name="twitter:description" content={pageDescription} />
 
     <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
+    <link rel="manifest" href={`${basePath}/manifest.json`} />
     <meta name="theme-color" content="#0f172a" />
+    <meta name="base-path" content={basePath} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -57,7 +59,7 @@ const pageDescription =
         "@type": "PostalAddress",
         addressLocality: profile.location,
       },
-      url: Astro.site?.href,
+      url: siteUrl,
       sameAs: [profile.linkedin, profile.github],
     })}>
     </script>
@@ -73,6 +75,16 @@ const pageDescription =
         const theme = stored || (prefersDark ? "dark" : "light");
         document.documentElement.classList.toggle("dark", theme === "dark");
       })();
+    </script>
+
+    <script>
+      const baseMeta = document.querySelector('meta[name="base-path"]');
+      const swBase = baseMeta?.getAttribute("content") || "";
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register(swBase + "/sw.js");
+        });
+      }
     </script>
   </head>
   <body class="antialiased">

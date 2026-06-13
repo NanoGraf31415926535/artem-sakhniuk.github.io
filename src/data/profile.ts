@@ -7,8 +7,9 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/artem-sakhniuk-0851b4231/",
   github: "https://github.com/NanoGraf31415926535",
   repo: "https://github.com/NanoGraf31415926535/artem-sakhniuk.github.io",
-  cvPath: "/assets/Artem_Sakhniuk_CV.pdf",
-  headshotPath: "/assets/IMG_3564.JPG",
+  base: "/artem-sakhniuk.github.io",
+  cvPath: "assets/Artem_Sakhniuk_CV.pdf",
+  headshotPath: "assets/IMG_3564.JPG",
   summary:
     "Detail-oriented Python Developer with over 2 years of experience in full-stack development and bioinformatics applications. Proficient in leveraging frameworks like Django and Flask to create scalable web applications, while driving digital transformation initiatives. Adept at collaborating with cross-functional teams to deliver innovative software solutions that enhance operational efficiency and user experience.",
   about: [
