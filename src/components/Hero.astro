@@ -5,54 +5,69 @@ import { profile } from "@/data/profile";
 
 <section
   id="home"
-  class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--color-bg-main)]"
+  class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--color-bg-main)] [isolation:isolate]"
 >
   <Hero3D />
 
-  <!-- Overlay: heavier in light mode to kill 3D bloom, lighter in dark -->
-  <div class="absolute inset-0 z-[1] bg-[var(--hero-overlay)] backdrop-blur-lg"></div>
+  <!--
+    Blend layer: sits between canvas (z-0) and text (z-10).
+    A very light veil so the 3D isn't totally raw, but thin enough
+    that the mix-blend-mode on the text layer still reacts to the mesh.
+  -->
+  <div class="absolute inset-0 z-[1] bg-[var(--color-bg-main)]/30"></div>
 
-  <div class="relative z-10 text-center max-w-3xl mx-auto px-4">
-    <h1 class="gradient-text text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight dark:drop-shadow-lg">
+  <!--
+    Text wrapper uses mix-blend-mode: difference.
+    All text is forced to white — against the near-white/near-black bg
+    the difference result is near-black (readable), but wherever the dark
+    3D mesh passes behind a glyph, the result flips toward white, creating
+    the "mesh reveals / inverts" effect.
+    The heading is NOT gradient here (gradients break blend modes) —
+    instead it uses a crisp white that looks stunning with the inversion.
+  -->
+  <div class="relative z-10 text-center max-w-3xl mx-auto px-4 mix-blend-difference">
+    <h1 class="text-white text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
       {profile.name}
     </h1>
-    <p class="text-xl sm:text-2xl text-[var(--color-text-primary)] mb-4 font-medium dark:drop-shadow-md">
+    <p class="text-xl sm:text-2xl text-white mb-4 font-medium">
       {profile.title} based in {profile.location}
     </p>
-    <p class="text-base sm:text-lg text-[var(--color-text-primary)]/80 max-w-xl mx-auto mb-8 leading-relaxed dark:drop-shadow-md">
+    <p class="text-base sm:text-lg text-white/90 max-w-xl mx-auto mb-8 leading-relaxed">
       {profile.summary}
     </p>
-    <div class="flex flex-wrap justify-center gap-4">
-      <a
-        href="#about"
-        class="gradient-bg px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
-      >
-        Discover My Journey
-      </a>
-      <button
-        id="open-ai-chat-btn"
-        class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300 cursor-pointer"
-        class:list={[
-          "border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] hover:gradient-bg hover:text-[var(--color-bg-main)] hover:border-transparent",
-        ]}
-      >
-        Ask Artem AI
-      </button>
-      <a
-        href={profile.cvPath}
-        download="Artem_Sakhniuk_CV.pdf"
-        class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300"
-        class:list={[
-          "border-[var(--color-border-light)] text-[var(--color-text-secondary)] hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]",
-        ]}
-      >
-        Download CV
-      </a>
-    </div>
+
+    <!--
+      Buttons must live OUTSIDE the blend container — blend-difference
+      would invert their backgrounds and make them look broken.
+      We position them absolutely or use a sibling z-layer.
+    -->
   </div>
 
-  <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+  <!-- Buttons: separate layer, no blend mode, sits above everything -->
+  <div class="absolute z-20 flex flex-wrap justify-center gap-4" style="top: calc(50% + 10rem);">
+    <a
+      href="#about"
+      class="gradient-bg px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
+    >
+      Discover My Journey
+    </a>
+    <button
+      id="open-ai-chat-btn"
+      class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300 cursor-pointer border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-main)] hover:border-transparent"
+    >
+      Ask Artem AI
+    </button>
+    <a
+      href={profile.cvPath}
+      download="Artem_Sakhniuk_CV.pdf"
+      class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300 border-[var(--color-border-light)] text-[var(--color-text-secondary)] hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
+    >
+      Download CV
+    </a>
+  </div>
+
+  <!-- Scroll indicator: also outside blend layer -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
     <svg
       class="w-6 h-6 text-[var(--color-text-tertiary)]"
       fill="none"
