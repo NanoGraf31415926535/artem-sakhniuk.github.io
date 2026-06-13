@@ -6,8 +6,8 @@ import { faq } from "@/data/faq";
 <style>
   /* ── Terminal skin — uses only site B&W design tokens ─────── */
   @keyframes scanlines {
-    0%   { background-position: 0 0; }
-    100% { background-position: 0 4px; }
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(4px); }
   }
   @keyframes blink {
     0%, 100% { opacity: 1; }
@@ -51,7 +51,11 @@ import { faq } from "@/data/faq";
     content: '';
     pointer-events: none;
     position: absolute;
-    inset: 0;
+    top: -4px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100% + 8px);
     z-index: 99;
     background: repeating-linear-gradient(
       to bottom,
@@ -60,7 +64,11 @@ import { faq } from "@/data/faq";
       transparent 1px,
       transparent 4px
     );
-    animation: scanlines 0.12s linear infinite;
+    will-change: transform;
+    animation: scanlines 0.4s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .term-window::after { animation: none; }
   }
 
   /* Title bar */
@@ -125,6 +133,7 @@ import { faq } from "@/data/faq";
     border-bottom: 1px solid var(--color-border-light);
     padding: 8px 12px;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     background: var(--color-bg-tertiary, var(--color-bg-main));
     display: flex;
@@ -157,6 +166,7 @@ import { faq } from "@/data/faq";
     background: var(--color-bg-main);
     padding: 12px 14px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     flex: 1;
     min-height: 280px;
     max-height: 48vh;
@@ -272,6 +282,14 @@ import { faq } from "@/data/faq";
     gap: 8px;
   }
   #chat-status { color: var(--color-text-secondary); }
+
+  /* iOS Safari zooms the whole page on focus if an input's font-size
+     is under 16px — this caused the "jump"/jank feeling on phones. */
+  @media (max-width: 640px) {
+    #chat-input {
+      font-size: 16px;
+    }
+  }
 </style>
 
 <!-- FAB -->
@@ -409,15 +427,32 @@ Artem is in a loving relationship with his wonderful girlfriend Victoria, whom h
       div.className = "term-msg term-msg-ai";
       const bubble = document.createElement("div");
       bubble.className = "term-bubble";
+      const textNode = document.createTextNode("");
       const cursor = document.createElement("span");
       cursor.className = "cursor-blink";
       div.innerHTML = `<div class="term-prompt-label">artem-ai@portfolio:~#</div>`;
       div.appendChild(bubble);
+      bubble.appendChild(textNode);
       bubble.appendChild(cursor);
       history.appendChild(div);
 
       const chars = Array.from(text); // handles unicode correctly
       let i = 0;
+      let scrollQueued = false;
+
+      // Batch scroll/layout work to once per animation frame instead of
+      // once per character, and only auto-scroll if the reader is
+      // already near the bottom (don't yank them down if they scrolled up).
+      function queueScroll() {
+        if (scrollQueued) return;
+        scrollQueued = true;
+        requestAnimationFrame(() => {
+          const nearBottom =
+            history.scrollHeight - history.scrollTop - history.clientHeight < 60;
+          if (nearBottom) history.scrollTop = history.scrollHeight;
+          scrollQueued = false;
+        });
+      }
 
       // Variable speed: faster for spaces/common chars, slight pause at punctuation
       function nextChar() {
@@ -427,9 +462,8 @@ Artem is in a loving relationship with his wonderful girlfriend Victoria, whom h
           return;
         }
         const ch = chars[i++];
-        // Insert char before cursor
-        cursor.insertAdjacentText("beforebegin", ch);
-        history.scrollTop = history.scrollHeight;
+        textNode.textContent += ch;
+        queueScroll();
 
         let delay = 18; // base ms per char
         if (ch === "." || ch === "!" || ch === "?") delay = 90;
