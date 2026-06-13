@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artem Sakhniuk - Full-Stack Web Developer</title>
-    <script src="https://js.puter.com/v2/"></script> <!-- Puter.js library -->
+
     <style>
         /* General styles */
         * {
@@ -2096,29 +2096,25 @@
                 }
 
                 try {
-                    // Construct the prompt
-                    let fullPromptForAI = portfolioContext + "\n\nConversation History:\n";
-                    chatConversation.forEach(msg => {
-                        if (msg.role === 'user') {
-                            fullPromptForAI += `User: ${msg.content}\n`;
-                        } else if (msg.role === 'assistant') {
-                            fullPromptForAI += `Artem AI: ${msg.content}\n`;
-                        }
-                    });
-                    fullPromptForAI += `User: ${message}\nArtem AI:`;
+                    const messages = [
+                        { role: "system", content: portfolioContext },
+                        ...chatConversation,
+                        { role: "user", content: message }
+                    ];
 
-                    // Try to get AI response
-                    const aiResponseText = await puter.ai.chat(fullPromptForAI, { 
-                        model: "gpt-4o",
-                        temperature: 0.7,
-                        max_tokens: 500
+                    const res = await fetch("https://artem-ai-proxy.artemsakhnyuk33.workers.dev", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ messages })
                     });
 
-                    if (aiResponseText) {
-                        chatConversation.push({ role: 'assistant', content: aiResponseText });
-                        displayMessage('ai', aiResponseText);
+                    const data = await res.json();
+
+                    if (data.text) {
+                        chatConversation.push({ role: 'assistant', content: data.text });
+                        displayMessage('ai', data.text);
                     } else {
-                        throw new Error('Empty response received');
+                        throw new Error(data.error || 'Empty response received');
                     }
 
                 } catch (error) {
