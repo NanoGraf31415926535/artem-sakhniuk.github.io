@@ -3,117 +3,339 @@ import { Icon } from "astro-icon/components";
 import { faq } from "@/data/faq";
 ---
 
-<!-- Floating Chat Button -->
+<style>
+  /* ── Terminal skin — uses only site B&W design tokens ─────── */
+  @keyframes scanlines {
+    0%   { background-position: 0 0; }
+    100% { background-position: 0 4px; }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* FAB — square, bordered, monospace glyph */
+  #chat-fab {
+    border-radius: 0 !important;
+    background: var(--color-bg-main) !important;
+    border: 1px solid var(--color-text-primary);
+    box-shadow: 3px 3px 0 var(--color-text-primary);
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  #chat-fab:hover {
+    box-shadow: 5px 5px 0 var(--color-text-primary);
+    transform: translate(-1px, -1px);
+  }
+  #chat-fab:active {
+    box-shadow: 1px 1px 0 var(--color-text-primary);
+    transform: translate(1px, 1px);
+  }
+
+  /* Window */
+  .term-window {
+    border-radius: 0 !important;
+    background: var(--color-bg-main);
+    border: 1px solid var(--color-text-primary);
+    box-shadow: 6px 6px 0 var(--color-text-primary);
+    font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Courier New', monospace;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Scanlines — very subtle, uses text color at low opacity */
+  .term-window::after {
+    content: '';
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 99;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(128,128,128,0.03) 0px,
+      rgba(128,128,128,0.03) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+    animation: scanlines 0.12s linear infinite;
+  }
+
+  /* Title bar */
+  .term-titlebar {
+    background: var(--color-text-primary);
+    color: var(--color-bg-main);
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .term-dots {
+    display: flex;
+    gap: 5px;
+  }
+  .term-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-bg-main);
+    opacity: 0.3;
+  }
+  .term-dot.active { opacity: 1; }
+  .term-title-text {
+    flex: 1;
+    text-align: center;
+    opacity: 0.85;
+  }
+  .term-close {
+    background: none;
+    border: none;
+    color: var(--color-bg-main);
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    opacity: 0.6;
+    padding: 0 2px;
+    font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  .term-close:hover { opacity: 1; }
+
+  /* Shell info line */
+  .term-header {
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 9px 14px;
+    background: var(--color-bg-secondary, var(--color-bg-main));
+  }
+  .term-header-line {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.04em;
+  }
+  .term-header-line .hl-primary { color: var(--color-text-primary); }
+  .term-header-line .hl-dim     { color: var(--color-text-tertiary); }
+
+  /* Prompt chips */
+  .term-prompts {
+    border-bottom: 1px solid var(--color-border-light);
+    padding: 8px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--color-bg-tertiary, var(--color-bg-main));
+    display: flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .premade-btn {
+    background: transparent;
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    padding: 3px 10px;
+    white-space: nowrap;
+    cursor: pointer;
+    text-transform: uppercase;
+    border-radius: 0;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+    flex-shrink: 0;
+  }
+  .premade-btn:hover {
+    background: var(--color-text-primary);
+    color: var(--color-bg-main);
+    border-color: var(--color-text-primary);
+  }
+
+  /* Chat history */
+  #chat-history {
+    background: var(--color-bg-main);
+    padding: 12px 14px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 280px;
+    max-height: 48vh;
+    scroll-behavior: smooth;
+  }
+
+  /* Messages */
+  .term-msg {
+    margin-bottom: 14px;
+    animation: fadeInUp 0.15s ease;
+  }
+  .term-prompt-label {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    margin-bottom: 2px;
+    text-transform: lowercase;
+  }
+  .term-msg-user .term-prompt-label { color: var(--color-text-tertiary); }
+  .term-msg-user .term-bubble {
+    color: var(--color-text-primary);
+    font-size: 13px;
+    line-height: 1.55;
+    word-break: break-word;
+  }
+  .term-msg-ai .term-prompt-label {
+    color: var(--color-text-tertiary);
+  }
+  .term-msg-ai .term-bubble {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  /* Loading */
+  #chat-loading .term-bubble { color: var(--color-text-tertiary); }
+  .cursor-blink {
+    display: inline-block;
+    width: 7px;
+    height: 13px;
+    background: var(--color-text-primary);
+    vertical-align: middle;
+    margin-left: 3px;
+    animation: blink 0.75s step-end infinite;
+  }
+
+  /* Input */
+  .term-input-row {
+    background: var(--color-bg-tertiary, var(--color-bg-main));
+    border-top: 1px solid var(--color-text-primary);
+    padding: 9px 14px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .term-prompt-glyph {
+    color: var(--color-text-primary);
+    font-size: 15px;
+    padding-bottom: 1px;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  #chat-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    max-height: 88px;
+    caret-color: var(--color-text-primary);
+  }
+  #chat-input::placeholder {
+    color: var(--color-text-tertiary);
+  }
+  #chat-send-btn {
+    background: transparent;
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-secondary);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 0;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+  }
+  #chat-send-btn:hover:not(:disabled) {
+    background: var(--color-text-primary);
+    color: var(--color-bg-main);
+    border-color: var(--color-text-primary);
+  }
+  #chat-send-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  /* Status bar */
+  .term-statusbar {
+    border-top: 1px solid var(--color-border-light);
+    background: var(--color-bg-secondary, var(--color-bg-main));
+    padding: 4px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.05em;
+    gap: 8px;
+  }
+  #chat-status { color: var(--color-text-secondary); }
+</style>
+
+<!-- FAB -->
 <button
   id="chat-fab"
-  class="fixed bottom-20 left-6 z-40 w-14 h-14 rounded-full shadow-xl transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
-  class:list={["gradient-bg"]}
+  class="fixed bottom-20 left-6 z-40 w-14 h-14 cursor-pointer flex items-center justify-center"
   aria-label="Open AI Chat"
 >
-  <Icon name="lucide:bot" class="w-7 h-7 mx-auto" />
+  <span style="font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--color-text-primary);line-height:1;">&gt;_</span>
 </button>
 
-<!-- Chat Modal -->
-<div
-  id="ai-chat-modal"
-  class="fixed inset-0 z-50 flex items-end sm:items-center justify-center hidden"
->
-  <!-- Overlay -->
-  <div
-    id="chat-overlay"
-    class="absolute inset-0 bg-black/60 backdrop-blur-sm"
-  ></div>
+<!-- Modal -->
+<div id="ai-chat-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center hidden">
+  <div id="chat-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 
-  <!-- Modal Content -->
-  <div
-    class="relative w-full sm:max-w-lg sm:mx-4 rounded-t-2xl sm:rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] flex flex-col"
-    class:list={["bg-[var(--color-bg-main)]"]}
-  >
-    <!-- Header -->
-    <div
-      class="flex items-center justify-between p-4 border-b"
-      class:list={["border-[var(--color-border-light)]"]}
-    >
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full gradient-bg flex items-center justify-center">
-          <Icon name="lucide:bot" class="w-5 h-5" />
-        </div>
-        <div>
-          <h3 class="font-semibold text-[var(--color-text-primary)]">
-            Ask Artem AI
-          </h3>
-          <p class="text-xs text-[var(--color-text-tertiary)]">
-            Powered by AI
-          </p>
-        </div>
+  <div class="term-window relative w-full sm:max-w-lg sm:mx-4 max-h-[92vh] flex flex-col">
+
+    <!-- Title bar (inverted) -->
+    <div class="term-titlebar">
+      <div class="term-dots">
+        <div class="term-dot"></div>
+        <div class="term-dot"></div>
+        <div class="term-dot active"></div>
       </div>
-      <button
-        id="chat-close-btn"
-        class="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
-        class:list={[
-          "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
-        ]}
-        aria-label="Close chat"
-      >
-        <Icon name="lucide:x" class="w-5 h-5" />
-      </button>
+      <span class="term-title-text">artem-ai — bash — 80×24</span>
+      <button id="chat-close-btn" class="term-close" aria-label="Close">✕</button>
     </div>
 
-    <!-- Premade Prompts -->
-    <div
-      class="flex gap-2 p-4 overflow-x-auto scrollbar-none border-b"
-      class:list={["border-[var(--color-border-light)]"]}
-    >
+    <!-- Shell line -->
+    <div class="term-header">
+      <div class="term-header-line">
+        <span class="hl-primary">artem@portfolio</span><span class="hl-dim">:~$</span>
+        &nbsp;./ask-artem <span class="hl-dim">--model gpt-4o --interactive</span>
+      </div>
+      <div class="term-header-line" style="margin-top:3px;">
+        <span class="hl-dim">● connected &nbsp;|&nbsp; context loaded &nbsp;|&nbsp; ready</span>
+      </div>
+    </div>
+
+    <!-- Quick-query chips -->
+    <div class="term-prompts">
       {faq.map((item) => (
-        <button
-          class="premade-btn px-4 py-2 text-sm rounded-full whitespace-nowrap transition-all duration-200 flex-shrink-0 cursor-pointer"
-          class:list={[
-            "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-text-primary)] hover:text-[var(--color-bg-main)]",
-          ]}
-        >
-          {item.question}
-        </button>
+        <button class="premade-btn">&gt; {item.question}</button>
       ))}
     </div>
 
-    <!-- Chat History -->
-    <div
-      id="chat-history"
-      class="flex-1 overflow-y-auto p-4 space-y-4 min-h-[300px] max-h-[50vh] scroll-smooth"
-    >
-      <!-- Messages injected here -->
+    <!-- Chat history -->
+    <div id="chat-history"></div>
+
+    <!-- Input row -->
+    <div class="term-input-row">
+      <span class="term-prompt-glyph">❯</span>
+      <textarea
+        id="chat-input"
+        rows={1}
+        placeholder="type a query and press enter..."
+      ></textarea>
+      <button id="chat-send-btn" disabled aria-label="Send">↵</button>
     </div>
 
-    <!-- Input -->
-    <div
-      class="p-4 border-t"
-      class:list={["border-[var(--color-border-light)]"]}
-    >
-      <div class="flex gap-3">
-        <textarea
-          id="chat-input"
-          rows={1}
-          placeholder="Ask me anything..."
-          class="flex-1 px-4 py-3 rounded-xl border resize-none outline-none transition-colors duration-200 max-h-24"
-          class:list={[
-            "bg-[var(--color-bg-main)] border-[var(--color-border-light)] text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)] focus:border-[var(--color-text-primary)]",
-          ]}
-        ></textarea>
-        <button
-          id="chat-send-btn"
-          class="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 flex-shrink-0 cursor-pointer"
-          class:list={[
-            "gradient-bg hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed",
-          ]}
-          disabled
-          aria-label="Send message"
-        >
-          <Icon name="lucide:send" class="w-5 h-5" />
-        </button>
-      </div>
-      <p id="chat-status" class="text-xs text-[var(--color-text-tertiary)] mt-2 text-center hidden">
-        Using offline FAQ mode
-      </p>
+    <!-- Status bar -->
+    <div class="term-statusbar">
+      <span id="chat-status" class="hidden"></span>
+      <span style="margin-left:auto;">esc · close &nbsp;|&nbsp; enter · send &nbsp;|&nbsp; shift+enter · newline</span>
     </div>
   </div>
 </div>
@@ -121,21 +343,19 @@ import { faq } from "@/data/faq";
 <script>
   import { faq } from "@/data/faq";
 
-  // --- State ---
-  const modal = document.getElementById("ai-chat-modal")!;
-  const overlay = document.getElementById("chat-overlay")!;
-  const fab = document.getElementById("chat-fab")!;
-  const closeBtn = document.getElementById("chat-close-btn")!;
-  const history = document.getElementById("chat-history")!;
-  const input = document.getElementById("chat-input") as HTMLTextAreaElement;
-  const sendBtn = document.getElementById("chat-send-btn") as HTMLButtonElement;
-  const status = document.getElementById("chat-status")!;
+  const modal     = document.getElementById("ai-chat-modal")!;
+  const overlay   = document.getElementById("chat-overlay")!;
+  const fab       = document.getElementById("chat-fab")!;
+  const closeBtn  = document.getElementById("chat-close-btn")!;
+  const history   = document.getElementById("chat-history")!;
+  const input     = document.getElementById("chat-input") as HTMLTextAreaElement;
+  const sendBtn   = document.getElementById("chat-send-btn") as HTMLButtonElement;
+  const status    = document.getElementById("chat-status")!;
   const premadeBtns = document.querySelectorAll(".premade-btn");
 
   let conversation: { role: "user" | "assistant"; content: string }[] = [];
   let useFallback = false;
 
-  // --- Context ---
   const portfolioContext = `
 **Role:** You are Artem Sakhniuk's professional AI assistant. Provide concise, accurate, professional information about Artem's skills and experience as a Full-Stack Web Developer.
 
@@ -161,68 +381,81 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
 **Constraint:** Only answer based on the provided information. Do not fabricate.
 `;
 
-  // --- Functions ---
   function addMessage(role: "user" | "assistant", text: string) {
     const div = document.createElement("div");
-    div.className = `flex gap-3 ${role === "user" ? "justify-end" : ""}`;
-
-    if (role === "assistant") {
-      div.innerHTML = `
-        <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center flex-shrink-0">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2a10 10 0 0110 10c0 1.5-.3 2.9-.9 4.2l1.4 4.3-4.3-1.4A10 10 0 1112 2z"/>
-          </svg>
-        </div>
-        <div class="max-w-[80%] px-4 py-2.5 rounded-2xl bg-[var(--color-bg-tertiary)] text-[var(--color-text-primary)]">
-          ${text}
-        </div>
-      `;
-    } else {
-      div.innerHTML = `
-        <div class="max-w-[80%] px-4 py-2.5 rounded-2xl gradient-bg">
-          ${text}
-        </div>
-        <div class="w-8 h-8 rounded-full bg-[var(--color-bg-tertiary)] flex items-center justify-center flex-shrink-0">
-          <svg class="w-4 h-4 text-[var(--color-text-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-      `;
-    }
-
+    div.className = `term-msg term-msg-${role === "user" ? "user" : "ai"}`;
+    const label = role === "user" ? "visitor@portfolio:~$" : "artem-ai@portfolio:~#";
+    div.innerHTML = `
+      <div class="term-prompt-label">${label}</div>
+      <div class="term-bubble">${text}</div>
+    `;
     history.appendChild(div);
     history.scrollTop = history.scrollHeight;
+  }
+
+  // Typewriter: streams text into a new AI bubble char by char
+  function typeMessage(text: string): Promise<void> {
+    return new Promise((resolve) => {
+      const div = document.createElement("div");
+      div.className = "term-msg term-msg-ai";
+      const bubble = document.createElement("div");
+      bubble.className = "term-bubble";
+      const cursor = document.createElement("span");
+      cursor.className = "cursor-blink";
+      div.innerHTML = `<div class="term-prompt-label">artem-ai@portfolio:~#</div>`;
+      div.appendChild(bubble);
+      bubble.appendChild(cursor);
+      history.appendChild(div);
+
+      const chars = Array.from(text); // handles unicode correctly
+      let i = 0;
+
+      // Variable speed: faster for spaces/common chars, slight pause at punctuation
+      function nextChar() {
+        if (i >= chars.length) {
+          cursor.remove();
+          resolve();
+          return;
+        }
+        const ch = chars[i++];
+        // Insert char before cursor
+        cursor.insertAdjacentText("beforebegin", ch);
+        history.scrollTop = history.scrollHeight;
+
+        let delay = 18; // base ms per char
+        if (ch === "." || ch === "!" || ch === "?") delay = 90;
+        else if (ch === ",") delay = 45;
+        else if (ch === " ") delay = 10;
+        // Small random jitter for organic feel
+        delay += Math.random() * 12;
+
+        setTimeout(nextChar, delay);
+      }
+
+      nextChar();
+    });
   }
 
   function addLoading() {
     const div = document.createElement("div");
     div.id = "chat-loading";
-    div.className = "flex gap-3";
+    div.className = "term-msg term-msg-ai";
     div.innerHTML = `
-      <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center flex-shrink-0">
-        <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12a9 9 0 11-6.2-8.6"/>
-        </svg>
-      </div>
-      <div class="px-4 py-2.5 rounded-2xl bg-[var(--color-bg-tertiary)] text-[var(--color-text-tertiary)] italic">
-        Thinking...
-      </div>
+      <div class="term-prompt-label">artem-ai@portfolio:~#</div>
+      <div class="term-bubble">processing<span class="cursor-blink"></span></div>
     `;
     history.appendChild(div);
     history.scrollTop = history.scrollHeight;
   }
 
   function removeLoading() {
-    const el = document.getElementById("chat-loading");
-    if (el) el.remove();
+    document.getElementById("chat-loading")?.remove();
   }
 
-  // FAQ fallback matching
   function getFaqAnswer(query: string): string | null {
     const q = query.toLowerCase();
     for (const item of faq) {
       const keywords = item.question.toLowerCase();
-      // Simple keyword matching
       const qWords = q.split(/\s+/);
       const matchCount = qWords.filter((w) => keywords.includes(w) && w.length > 3).length;
       if (matchCount >= 2) return item.answer;
@@ -232,42 +465,36 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
 
   async function sendMessage(message: string) {
     if (!message.trim()) return;
-
     addMessage("user", message);
     conversation.push({ role: "user", content: message });
     input.value = "";
+    input.style.height = "auto";
     sendBtn.disabled = true;
-
     addLoading();
 
     try {
       if (useFallback) {
-        // Use FAQ fallback
-        const answer = getFaqAnswer(message) || "I'm sorry, I don't have an answer for that. Please try asking about Artem's skills, projects, or experience.";
-        await new Promise((r) => setTimeout(r, 500));
+        const answer = getFaqAnswer(message) || "No match found. Try querying about skills, experience, or projects.";
+        await new Promise((r) => setTimeout(r, 400));
         removeLoading();
-        addMessage("assistant", answer);
+        await typeMessage(answer);
         conversation.push({ role: "assistant", content: answer });
       } else {
-        // Try Puter.js
         const fullPrompt =
           portfolioContext +
           "\n\nConversation History:\n" +
-          conversation
-            .map((m) => `${m.role === "user" ? "User" : "Artem AI"}: ${m.content}`)
-            .join("\n") +
+          conversation.map((m) => `${m.role === "user" ? "User" : "Artem AI"}: ${m.content}`).join("\n") +
           `\nUser: ${message}\nArtem AI:`;
 
-        const response = await puter.ai.chat(fullPrompt, {
+        const response = await (window as any).puter.ai.chat(fullPrompt, {
           model: "gpt-4o",
           temperature: 0.7,
           max_tokens: 500,
         });
 
         removeLoading();
-
         if (response) {
-          addMessage("assistant", response);
+          await typeMessage(response);
           conversation.push({ role: "assistant", content: response });
         } else {
           throw new Error("Empty response");
@@ -275,21 +502,15 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
       }
     } catch {
       removeLoading();
-
       if (!useFallback) {
-        // Fallback to FAQ mode
         useFallback = true;
         status.classList.remove("hidden");
-        status.textContent = "AI service unavailable. Using offline FAQ mode.";
-
-        const answer = getFaqAnswer(message) || "I'm sorry, I don't have an answer for that. Please try asking about Artem's skills, projects, or experience.";
-        addMessage("assistant", answer);
+        status.textContent = "⚠ ai offline — faq fallback active";
+        const answer = getFaqAnswer(message) || "No match in FAQ. Try asking about Artem's skills, projects, or experience.";
+        await typeMessage(answer);
         conversation.push({ role: "assistant", content: answer });
       } else {
-        addMessage(
-          "assistant",
-          "I apologize, but I'm having trouble connecting. Please try again in a moment."
-        );
+        await typeMessage("ERR: connection timeout. Retry in a moment.");
       }
     }
 
@@ -297,21 +518,18 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
     input.focus();
   }
 
-  // --- Event Listeners ---
   const openModal = () => {
     modal.classList.remove("hidden");
     modal.classList.add("flex");
     input.focus();
-
     if (conversation.length === 0) {
-      const greeting = "Hello! I'm Artem's AI assistant. Ask me anything about his skills, projects, or journey!";
-      addMessage("assistant", greeting);
+      const greeting = "System ready. I'm Artem's AI assistant — query me about his skills, projects, or background.";
+      typeMessage(greeting);
       conversation.push({ role: "assistant", content: greeting });
     }
   };
 
   fab.addEventListener("click", openModal);
-
   document.getElementById("open-ai-chat-btn")?.addEventListener("click", openModal);
 
   const closeModal = () => {
@@ -321,7 +539,6 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
 
   overlay.addEventListener("click", closeModal);
   closeBtn.addEventListener("click", closeModal);
-
   sendBtn.addEventListener("click", () => sendMessage(input.value));
 
   input.addEventListener("keydown", (e) => {
@@ -334,16 +551,16 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
   input.addEventListener("input", () => {
     sendBtn.disabled = !input.value.trim();
     input.style.height = "auto";
-    input.style.height = Math.min(input.scrollHeight, 96) + "px";
+    input.style.height = Math.min(input.scrollHeight, 88) + "px";
   });
 
   premadeBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      sendMessage(btn.textContent!.trim());
+      const raw = btn.textContent!.trim().replace(/^>\s*/, "");
+      sendMessage(raw);
     });
   });
 
-  // Handle "Learn More" skill queries
   modal.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     const skillBtn = target.closest(".skill-info-btn");
@@ -364,10 +581,7 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
     }
   });
 
-  // Escape key
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-      closeModal();
-    }
+    if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
   });
 </script>
