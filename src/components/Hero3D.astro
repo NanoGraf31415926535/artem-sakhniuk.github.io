@@ -32,8 +32,8 @@
     const knotGeometry = new THREE.TorusKnotGeometry(0.8, 0.3, 128, 16);
     const knotMaterial = new THREE.MeshPhysicalMaterial({
       color: new THREE.Color(getMeshColor()),
-      emissive: new THREE.Color(0x000000),
-      emissiveIntensity: 0,
+      emissive: new THREE.Color(getMeshColor()),
+      emissiveIntensity: 0.8,
       metalness: 0.0,
       roughness: 1.0,
       transparent: true,
@@ -88,7 +88,7 @@
       size: 0.06,
       vertexColors: true,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.7,
       blending: THREE.NormalBlending,
       depthWrite: false,
     });
@@ -98,7 +98,9 @@
     // ─── Theme change observer ────────────────────────────────────────────────
     // Watch for .dark class toggling on <html> and update mesh colours instantly
     const themeObserver = new MutationObserver(() => {
-      knotMaterial.color.setHex(getMeshColor());
+      const hex = getMeshColor();
+      knotMaterial.color.setHex(hex);
+      knotMaterial.emissive.setHex(hex);
       wireframeMaterial.color.setHex(getWireColor());
       buildParticleColors();
       colorAttr.needsUpdate = true;
@@ -131,7 +133,7 @@
       const opacity = Math.max(1 - scrollFactor * 2, 0);
       knotMaterial.opacity      = opacity * 0.92;
       wireframeMaterial.opacity = opacity * 0.12;
-      particleMaterial.opacity  = opacity * 0.5;
+      particleMaterial.opacity  = opacity * 0.7;
 
       targetKnotRotX += (mouseY * 0.5 - targetKnotRotX) * 0.05;
       targetKnotRotY += (mouseX * 0.5 - targetKnotRotY) * 0.05;

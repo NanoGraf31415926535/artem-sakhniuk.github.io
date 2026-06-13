@@ -14,37 +14,22 @@ import { profile } from "@/data/profile";
     A very light veil so the 3D isn't totally raw, but thin enough
     that the mix-blend-mode on the text layer still reacts to the mesh.
   -->
-  <div class="absolute inset-0 z-[1] bg-[var(--color-bg-main)]/30"></div>
+  <div class="absolute inset-0 z-[1] bg-[var(--color-bg-main)]/60 dark:bg-black/60 backdrop-blur-xl"></div>
 
-  <!--
-    Text wrapper uses mix-blend-mode: difference.
-    All text is forced to white — against the near-white/near-black bg
-    the difference result is near-black (readable), but wherever the dark
-    3D mesh passes behind a glyph, the result flips toward white, creating
-    the "mesh reveals / inverts" effect.
-    The heading is NOT gradient here (gradients break blend modes) —
-    instead it uses a crisp white that looks stunning with the inversion.
-  -->
-  <div class="relative z-10 text-center max-w-3xl mx-auto px-4 mix-blend-difference">
-    <h1 class="text-white text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
+  <div class="relative z-10 text-center max-w-3xl mx-auto px-4">
+    <h1 class="text-[var(--color-text-primary)] text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
       {profile.name}
     </h1>
-    <p class="text-xl sm:text-2xl text-white mb-4 font-medium">
+    <p class="text-xl sm:text-2xl text-[var(--color-text-secondary)] mb-4 font-medium">
       {profile.title} based in {profile.location}
     </p>
-    <p class="text-base sm:text-lg text-white/90 max-w-xl mx-auto mb-8 leading-relaxed">
+    <p class="text-base sm:text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
       {profile.summary}
     </p>
-
-    <!--
-      Buttons must live OUTSIDE the blend container — blend-difference
-      would invert their backgrounds and make them look broken.
-      We position them absolutely or use a sibling z-layer.
-    -->
   </div>
 
-  <!-- Buttons: separate layer, no blend mode, sits above everything -->
-  <div class="absolute z-20 flex flex-wrap justify-center gap-4" style="top: calc(50% + 12rem);">
+  <!-- Buttons -->
+  <div class="relative z-10 mt-10 flex flex-wrap justify-center gap-4">
     <a
       href="#about"
       class="gradient-bg px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
