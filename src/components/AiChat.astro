@@ -480,24 +480,26 @@ Artem Sakhniuk is a UK-based Full-Stack Web Developer with a background in Bioin
         await typeMessage(answer);
         conversation.push({ role: "assistant", content: answer });
       } else {
-        const fullPrompt =
-          portfolioContext +
-          "\n\nConversation History:\n" +
-          conversation.map((m) => `${m.role === "user" ? "User" : "Artem AI"}: ${m.content}`).join("\n") +
-          `\nUser: ${message}\nArtem AI:`;
+        const messages = [
+          { role: "system", content: portfolioContext },
+          ...conversation,
+          { role: "user", content: message },
+        ];
 
-        const response = await (window as any).puter.ai.chat(fullPrompt, {
-          model: "gpt-4o",
-          temperature: 0.7,
-          max_tokens: 500,
+        const res = await fetch("https://artem-ai-proxy.artemsakhnyuk33.workers.dev", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages }),
         });
 
+        const data = await res.json();
         removeLoading();
-        if (response) {
-          await typeMessage(response);
-          conversation.push({ role: "assistant", content: response });
+
+        if (data.text) {
+          await typeMessage(data.text);
+          conversation.push({ role: "assistant", content: data.text });
         } else {
-          throw new Error("Empty response");
+          throw new Error(data.error || "Empty response");
         }
       }
     } catch {
