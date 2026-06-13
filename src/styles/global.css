@@ -32,6 +32,7 @@
   --color-card-shadow: rgba(0, 0, 0, 0.08);
   --color-gradient-from: #6366f1;
   --color-gradient-to: #4f46e5;
+  --hero-overlay: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0.7) 100%);
 }
 
 .dark {
@@ -46,6 +47,7 @@
   --color-card-shadow: rgba(0, 0, 0, 0.3);
   --color-gradient-from: #6366f1;
   --color-gradient-to: #ec4899;
+  --hero-overlay: linear-gradient(180deg, rgba(15,23,42,0.3) 0%, transparent 50%, rgba(15,23,42,0.5) 100%);
 }
 
 html {

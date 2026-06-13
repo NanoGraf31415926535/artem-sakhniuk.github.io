@@ -9,16 +9,17 @@ import { profile } from "@/data/profile";
 >
   <Hero3D />
 
-  <div class="absolute inset-0 bg-gradient-to-b from-[var(--color-bg-main)]/60 via-transparent to-[var(--color-bg-main)]/80 z-[1]"></div>
+  <!-- Overlay: heavier in light mode to kill 3D bloom, lighter in dark -->
+  <div class="absolute inset-0 z-[1] bg-[var(--hero-overlay)] backdrop-blur-lg"></div>
 
   <div class="relative z-10 text-center max-w-3xl mx-auto px-4">
-    <h1 class="gradient-text text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+    <h1 class="gradient-text text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight dark:drop-shadow-lg">
       {profile.name}
     </h1>
-    <p class="text-xl sm:text-2xl text-[var(--color-text-light)] mb-4 font-light drop-shadow-md">
+    <p class="text-xl sm:text-2xl text-[var(--color-text-primary)] mb-4 font-medium dark:drop-shadow-md">
       {profile.title} based in {profile.location}
     </p>
-    <p class="text-base sm:text-lg text-slate-200 max-w-xl mx-auto mb-8 leading-relaxed drop-shadow-md">
+    <p class="text-base sm:text-lg text-[var(--color-text-primary)]/80 max-w-xl mx-auto mb-8 leading-relaxed dark:drop-shadow-md">
       {profile.summary}
     </p>
     <div class="flex flex-wrap justify-center gap-4">
@@ -42,7 +43,7 @@ import { profile } from "@/data/profile";
         download="Artem_Sakhniuk_CV.pdf"
         class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300"
         class:list={[
-          "border-white/30 text-white/90 hover:border-white hover:text-white hover:bg-white/10",
+          "border-[var(--color-border-light)] text-[var(--color-text-primary)]/70 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)]",
         ]}
       >
         Download CV
@@ -53,7 +54,7 @@ import { profile } from "@/data/profile";
   <!-- Scroll indicator -->
   <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
     <svg
-      class="w-6 h-6 text-white/50"
+      class="w-6 h-6 text-[var(--color-text-tertiary)]"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"
