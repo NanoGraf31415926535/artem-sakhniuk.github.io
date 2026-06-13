@@ -5,66 +5,161 @@ import { profile } from "@/data/profile";
 
 <section
   id="home"
-  class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--color-bg-main)] [isolation:isolate]"
+  class="hero-section relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[var(--color-bg-main)] [isolation:isolate]"
 >
   <Hero3D />
 
-  <!--
-    Blend layer: sits between canvas (z-0) and text (z-10).
-    A very light veil so the 3D isn't totally raw, but thin enough
-    that the mix-blend-mode on the text layer still reacts to the mesh.
-  -->
-  <div class="absolute inset-0 z-[1] bg-[var(--color-bg-main)]/60 dark:bg-black/60 backdrop-blur-xl"></div>
+  <!-- Blend layer -->
+  <div class="absolute inset-0 z-[1] bg-[var(--color-bg-main)]/55 dark:bg-black/55 backdrop-blur-lg"></div>
 
-  <div class="relative z-10 text-center max-w-3xl mx-auto px-4">
-    <h1 class="text-[var(--color-text-primary)] text-5xl sm:text-6xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
+  <!-- Content column — pt-16 clears the fixed 64px header -->
+  <div class="relative z-10 w-full max-w-2xl mx-auto px-6 sm:px-8 pt-16 flex flex-col items-center text-center gap-0">
+
+    <!-- Eyebrow -->
+    <span class="hero-eyebrow inline-flex items-center gap-2 text-xs sm:text-sm font-mono font-medium tracking-[0.18em] uppercase text-[var(--color-text-tertiary)] mb-5">
+      <span class="hero-dot"></span>
+      Available for freelance
+      <span class="hero-dot"></span>
+    </span>
+
+    <!-- Name -->
+    <h1 class="hero-name text-[clamp(2.4rem,8vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight mb-4">
       {profile.name}
     </h1>
-    <p class="text-xl sm:text-2xl text-[var(--color-text-secondary)] mb-4 font-medium">
-      {profile.title} based in {profile.location}
+
+    <!-- Title + location -->
+    <p class="text-base sm:text-xl text-[var(--color-text-secondary)] font-medium mb-3">
+      {profile.title}
+      <span class="hero-location-sep mx-2 opacity-30">·</span>
+      {profile.location}
     </p>
-    <p class="text-base sm:text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto mb-8 leading-relaxed">
+
+    <!-- Summary -->
+    <p class="text-sm sm:text-base text-[var(--color-text-secondary)] max-w-md mx-auto leading-relaxed mb-8 opacity-80">
       {profile.summary}
     </p>
+
+    <!-- Divider -->
+    <div class="hero-divider w-12 h-px bg-[var(--color-border-light)] mb-8"></div>
+
+    <!-- Buttons -->
+    <div class="hero-buttons w-full flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
+      <a
+        href="#about"
+        class="hero-btn-primary gradient-bg px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold text-center transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
+      >
+        Discover My Journey
+      </a>
+      <button
+        id="open-ai-chat-btn"
+        class="hero-btn-secondary px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold border backdrop-blur-sm transition-all duration-300 cursor-pointer border-[var(--color-text-secondary)]/40 text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-main)] hover:border-transparent"
+      >
+        Ask Artem AI
+      </button>
+      <a
+        href={profile.cvPath}
+        download="Artem_Sakhniuk_CV.pdf"
+        class="hero-btn-ghost px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold border backdrop-blur-sm transition-all duration-300 border-[var(--color-border-light)] text-[var(--color-text-secondary)]/70 hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
+      >
+        Download CV
+      </a>
+    </div>
   </div>
 
-  <!-- Buttons -->
-  <div class="relative z-10 mt-10 flex flex-wrap justify-center gap-4">
-    <a
-      href="#about"
-      class="gradient-bg px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
-    >
-      Discover My Journey
-    </a>
-    <button
-      id="open-ai-chat-btn"
-      class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300 cursor-pointer border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-main)] hover:border-transparent"
-    >
-      Ask Artem AI
-    </button>
-    <a
-      href={profile.cvPath}
-      download="Artem_Sakhniuk_CV.pdf"
-      class="px-8 py-3 rounded-full font-semibold border-2 backdrop-blur-sm transition-all duration-300 border-[var(--color-border-light)] text-[var(--color-text-secondary)] hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
-    >
-      Download CV
-    </a>
-  </div>
-
-  <!-- Scroll indicator: also outside blend layer -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-    <svg
-      class="w-6 h-6 text-[var(--color-text-tertiary)]"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M19 14l-7 7m0 0l-7-7m7 7V3"
-      />
-    </svg>
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-7 left-1/2 -translate-x-1/2 z-20">
+    <div class="hero-scroll-mouse" aria-hidden="true">
+      <div class="hero-scroll-wheel"></div>
+    </div>
   </div>
 </section>
+
+<style>
+  /* ── Gradient name ─────────────────────────────────────────────────────── */
+  .hero-name {
+    background: linear-gradient(
+      135deg,
+      var(--color-text-primary) 0%,
+      var(--color-primary, #6c63ff) 55%,
+      var(--color-text-primary) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 6s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 0%   50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0%   50%; }
+  }
+
+  /* ── Eyebrow dots ──────────────────────────────────────────────────────── */
+  .hero-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-primary, #6c63ff);
+    opacity: 0.7;
+  }
+
+  /* ── Divider ───────────────────────────────────────────────────────────── */
+  .hero-divider {
+    opacity: 0.5;
+  }
+
+  /* ── Scroll mouse indicator ────────────────────────────────────────────── */
+  .hero-scroll-mouse {
+    width: 22px;
+    height: 34px;
+    border: 1.5px solid var(--color-text-tertiary);
+    border-radius: 11px;
+    opacity: 0.5;
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+    animation: float 2.4s ease-in-out infinite;
+  }
+
+  .hero-scroll-wheel {
+    width: 3px;
+    height: 7px;
+    background: var(--color-text-tertiary);
+    border-radius: 2px;
+    animation: scroll-wheel 2.4s ease-in-out infinite;
+  }
+
+  @keyframes scroll-wheel {
+    0%   { opacity: 1; transform: translateY(0); }
+    60%  { opacity: 0; transform: translateY(7px); }
+    61%  { opacity: 0; transform: translateY(0); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(4px); }
+  }
+
+  /* ── Button touch targets ──────────────────────────────────────────────── */
+  @media (max-width: 639px) {
+    .hero-btn-primary,
+    .hero-btn-secondary,
+    .hero-btn-ghost {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  /* ── Reduce motion ─────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-name { animation: none; }
+    .hero-scroll-mouse,
+    .hero-scroll-wheel { animation: none; }
+  }
+</style>
