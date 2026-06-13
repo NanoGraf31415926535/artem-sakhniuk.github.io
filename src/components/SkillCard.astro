@@ -15,10 +15,10 @@ const { skill } = Astro.props;
 >
   <Icon
     name={skill.icon}
-    class="w-10 h-10 mb-4 text-[var(--color-primary)] transition-transform duration-300 group-hover:scale-110"
+    class="w-10 h-10 mb-4 text-[var(--color-text-primary)] transition-transform duration-300 group-hover:scale-110"
   />
 
-  <h3 class="text-lg font-bold text-[var(--color-primary)] mb-2">
+  <h3 class="text-lg font-bold text-[var(--color-text-primary)] mb-2">
     {skill.title}
   </h3>
 
@@ -38,7 +38,7 @@ const { skill } = Astro.props;
   <button
     class="skill-info-btn mt-2 px-4 py-2 text-sm rounded-full font-medium border transition-all duration-200 cursor-pointer"
     class:list={[
-      "border-[var(--color-primary)] text-[var(--color-primary)] hover:gradient-bg hover:text-white hover:border-transparent",
+      "border-[var(--color-text-secondary)] text-[var(--color-text-secondary)] hover:gradient-bg hover:text-[var(--color-bg-main)] hover:border-transparent",
     ]}
     data-skill={skill.id}
   >

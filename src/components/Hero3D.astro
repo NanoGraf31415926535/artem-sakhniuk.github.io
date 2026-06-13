@@ -29,14 +29,18 @@
     renderer.setSize(hero.clientWidth, hero.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+    const isDark = document.documentElement.classList.contains("dark");
+    const lightColor = isDark ? 0xeeeeee : 0x222222;
+    const darkColor = isDark ? 0xffffff : 0x000000;
+
     // Torus Knot
     const knotGeometry = new THREE.TorusKnotGeometry(0.8, 0.3, 128, 16);
     const knotMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(0x6366f1),
-      emissive: new THREE.Color(0x4f46e5),
-      emissiveIntensity: 0.3,
-      metalness: 0.3,
-      roughness: 0.4,
+      color: new THREE.Color(darkColor),
+      emissive: new THREE.Color(darkColor),
+      emissiveIntensity: 0.15,
+      metalness: 0.1,
+      roughness: 0.6,
       transparent: true,
       opacity: 0.9,
       wireframe: false,
@@ -46,7 +50,7 @@
 
     // Wireframe overlay
     const wireframeMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(0x818cf8),
+      color: new THREE.Color(lightColor),
       wireframe: true,
       transparent: true,
       opacity: 0.15,
@@ -60,8 +64,8 @@
     const colors = new Float32Array(particleCount * 3);
     const sizes = new Float32Array(particleCount);
 
-    const color1 = new THREE.Color(0x6366f1);
-    const color2 = new THREE.Color(0xec4899);
+    const color1 = new THREE.Color(isDark ? 0xcccccc : 0x444444);
+    const color2 = new THREE.Color(isDark ? 0xffffff : 0x000000);
 
     for (let i = 0; i < particleCount; i++) {
       const radius = 2 + Math.random() * 4;
@@ -156,12 +160,6 @@
       knot.rotation.y += 0.008 + targetKnotRotY * 0.01;
       wireframe.rotation.x = knot.rotation.x;
       wireframe.rotation.y = knot.rotation.y;
-
-      // Color shift
-      const hue = (Date.now() * 0.0001) % 1;
-      const color = new THREE.Color().setHSL(0.7 + Math.sin(hue * Math.PI) * 0.1, 0.6, 0.5);
-      knot.material.color.set(color);
-      knot.material.emissive.set(color);
 
       particles.rotation.x += 0.0003;
       particles.rotation.y += 0.0005;

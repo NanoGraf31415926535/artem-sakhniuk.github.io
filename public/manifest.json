@@ -4,8 +4,8 @@
   "description": "Full-Stack Web Developer portfolio showcasing skills, projects, and experience.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#000000",
+  "theme_color": "#000000",
   "icons": [
     {
       "src": "/assets/icon-192.svg",
