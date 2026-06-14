@@ -169,7 +169,6 @@ import { faq } from "@/data/faq";
     -webkit-overflow-scrolling: touch;
     flex: 1;
     min-height: 280px;
-    max-height: 48vh;
     scroll-behavior: smooth;
   }
 
@@ -286,6 +285,14 @@ import { faq } from "@/data/faq";
   /* iOS Safari zooms the whole page on focus if an input's font-size
      is under 16px — this caused the "jump"/jank feeling on phones. */
   @media (max-width: 640px) {
+    .term-window {
+      height: 100dvh;
+      border: none;
+      box-shadow: none;
+    }
+    .term-statusbar {
+      display: none;
+    }
     #chat-input {
       font-size: 16px;
     }
@@ -305,7 +312,7 @@ import { faq } from "@/data/faq";
 <div id="ai-chat-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center hidden">
   <div id="chat-overlay" class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
 
-  <div class="term-window relative w-full sm:max-w-lg sm:mx-4 max-h-[92vh] flex flex-col">
+  <div class="term-window relative w-full sm:max-w-lg sm:mx-4 sm:max-h-[92vh] flex flex-col">
 
     <!-- Title bar (inverted) -->
     <div class="term-titlebar">
