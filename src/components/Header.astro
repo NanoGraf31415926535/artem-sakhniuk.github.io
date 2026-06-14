@@ -1,6 +1,17 @@
 ---
 import { profile } from "@/data/profile";
 import { Icon } from "astro-icon/components";
+
+const base = profile.base;
+const navItems = [
+  { label: "Home", href: `${base}/` },
+  { label: "About", href: `${base}/#about` },
+  { label: "Journey", href: `${base}/#journey` },
+  { label: "Skills", href: `${base}/#skills` },
+  { label: "Projects", href: `${base}/#projects` },
+  { label: "Blog", href: `${base}/blog/` },
+  { label: "Contact", href: `${base}/#contact` },
+];
 ---
 
 <header
@@ -10,25 +21,23 @@ import { Icon } from "astro-icon/components";
   <div
     class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16"
   >
-    <a href="#" class="text-[var(--color-text-primary)] text-xl font-bold tracking-tight">
+    <a href={`${base}/`} class="text-[var(--color-text-primary)] text-xl font-bold tracking-tight">
       {profile.name}
     </a>
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-8">
-      {["Home", "About", "Journey", "Skills", "Projects", "Blog", "Contact"].map(
-        (item) => (
-          <a
-            href={item === "Home" ? "#" : item === "Blog" ? "/artem-sakhniuk.github.io/blog/" : `#${item.toLowerCase()}`}
-            class="text-sm font-medium transition-colors duration-200"
-            class:list={[
-              "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
-            ]}
-          >
-            {item}
-          </a>
-        )
-      )}
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="text-sm font-medium transition-colors duration-200"
+          class:list={[
+            "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
 
       <!-- Theme Toggle -->
       <button
@@ -88,19 +97,17 @@ import { Icon } from "astro-icon/components";
       </button>
     </div>
     <nav class="flex flex-col items-center gap-6 mt-12">
-      {["Home", "About", "Journey", "Skills", "Projects", "Blog", "Contact"].map(
-        (item) => (
-          <a
-            href={item === "Home" ? "#" : item === "Blog" ? "/artem-sakhniuk.github.io/blog/" : `#${item.toLowerCase()}`}
-            class="text-lg font-medium transition-colors duration-200"
-            class:list={[
-              "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
-            ]}
-          >
-            {item}
-          </a>
-        )
-      )}
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="text-lg font-medium transition-colors duration-200"
+          class:list={[
+            "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
     </nav>
   </div>
 </header>
