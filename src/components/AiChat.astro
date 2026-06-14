@@ -570,11 +570,11 @@ Artem is in a loving relationship with his wonderful girlfriend Victoria, whom h
     input.focus();
   }
 
-  const openModal = () => {
+  const openModal = (skipGreeting = false) => {
     modal.classList.remove("hidden");
     modal.classList.add("flex");
     input.focus();
-    if (conversation.length === 0) {
+    if (!skipGreeting && conversation.length === 0) {
       const greeting = "System ready. I'm Artem's AI assistant — query me about his skills, projects, or background.";
       typeMessage(greeting);
       conversation.push({ role: "assistant", content: greeting });
@@ -632,6 +632,25 @@ Artem is in a loving relationship with his wonderful girlfriend Victoria, whom h
       if (query) sendMessage(query);
     }
   });
+
+  modal.addEventListener("skill-query", ((e: CustomEvent) => {
+    const { skill } = e.detail;
+    const queries: Record<string, string> = {
+      "core-languages": "Tell me more about Artem's experience with Python, JavaScript, C++, C#, Java, and PHP.",
+      frontend: "Explain Artem's frontend development skills with React, Vue.js, and Next.js.",
+      backend: "Detail Artem's backend development experience with Node.js, Django, Flask, and Laravel.",
+      database: "What is Artem's experience with PostgreSQL and database design?",
+      "data-science": "Tell me about Artem's data science and bioinformatics skills.",
+      ai: "Explain Artem's experience with AI integration and machine learning.",
+      tools: "What development tools does Artem use?",
+      management: "Tell me about Artem's project management experience.",
+    };
+    const query = queries[skill || ""];
+    if (query) {
+      openModal(true);
+      sendMessage(query);
+    }
+  }) as EventListener);
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
