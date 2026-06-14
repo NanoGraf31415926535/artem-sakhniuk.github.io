@@ -16,10 +16,10 @@ import { Icon } from "astro-icon/components";
 
     <!-- Desktop Nav -->
     <nav class="hidden md:flex items-center gap-8">
-      {["Home", "About", "Journey", "Skills", "Projects", "Contact"].map(
+      {["Home", "About", "Journey", "Skills", "Projects", "Blog", "Contact"].map(
         (item) => (
           <a
-            href={item === "Home" ? "#" : `#${item.toLowerCase()}`}
+            href={item === "Home" ? "#" : item === "Blog" ? "/artem-sakhniuk.github.io/blog/" : `#${item.toLowerCase()}`}
             class="text-sm font-medium transition-colors duration-200"
             class:list={[
               "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
@@ -88,10 +88,10 @@ import { Icon } from "astro-icon/components";
       </button>
     </div>
     <nav class="flex flex-col items-center gap-6 mt-12">
-      {["Home", "About", "Journey", "Skills", "Projects", "Contact"].map(
+      {["Home", "About", "Journey", "Skills", "Projects", "Blog", "Contact"].map(
         (item) => (
           <a
-            href={item === "Home" ? "#" : `#${item.toLowerCase()}`}
+            href={item === "Home" ? "#" : item === "Blog" ? "/artem-sakhniuk.github.io/blog/" : `#${item.toLowerCase()}`}
             class="text-lg font-medium transition-colors duration-200"
             class:list={[
               "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",

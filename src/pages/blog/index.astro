@@ -1,0 +1,95 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+const allPosts = await getCollection("blog");
+
+const publishedPosts = allPosts
+  .filter((post: CollectionEntry<"blog">) => !post.data.draft || import.meta.env.DEV)
+  .sort(
+    (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+      b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
+  );
+---
+
+<BaseLayout title="Blog - Artem Sakhniuk" description="Articles and thoughts from Artem Sakhniuk">
+  <Header />
+
+  <main class="min-h-screen pt-24 pb-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h1 class="text-3xl sm:text-4xl font-bold mb-2">Blog</h1>
+      <p class="text-[var(--color-text-secondary)] mb-12">
+        Thoughts, notes, and things I've learned.
+      </p>
+
+      {
+        publishedPosts.length === 0 ? (
+          <p class="text-[var(--color-text-tertiary)]">No posts yet. Check back soon!</p>
+        ) : (
+          <div class="flex flex-col gap-8">
+            {publishedPosts.map((post: CollectionEntry<"blog">) => (
+              <a
+                href={`/artem-sakhniuk.github.io/blog/${post.slug}/`}
+                class="block group"
+              >
+                <article
+                  class="p-6 rounded-xl transition-all duration-200"
+                  class:list={[
+                    "bg-[var(--color-card-bg)] border border-[var(--color-border-light)]",
+                    "hover:shadow-lg hover:shadow-[var(--color-card-shadow)] hover:-translate-y-0.5",
+                  ]}
+                >
+                  <div class="flex items-center gap-2 text-sm text-[var(--color-text-tertiary)] mb-3">
+                    <Icon name="lucide:calendar" class="w-4 h-4" />
+                    <time datetime={post.data.publishedDate.toISOString()}>
+                      {post.data.publishedDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </time>
+                  </div>
+
+                  <h2
+                    class="text-xl font-semibold mb-2 transition-colors duration-200"
+                    class:list={[
+                      "text-[var(--color-text-primary)] group-hover:text-[var(--color-text-secondary)]",
+                    ]}
+                  >
+                    {post.data.title}
+                  </h2>
+
+                  {post.data.description && (
+                    <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
+                      {post.data.description}
+                    </p>
+                  )}
+
+                  {post.data.tags.length > 0 && (
+                    <div class="flex flex-wrap gap-2 mt-4">
+                      {post.data.tags.map((tag: string) => (
+                        <span
+                          class="px-2.5 py-0.5 text-xs font-medium rounded-full"
+                          class:list={[
+                            "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
+                          ]}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </article>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>

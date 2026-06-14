@@ -1,0 +1,39 @@
+name: Blog from Telegram
+
+on:
+  schedule:
+    - cron: "0 8 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Fetch Telegram messages and create blog posts
+        run: node .github/scripts/telegram-bot.mjs
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: new blog post from Telegram"
+            git push
+          fi
