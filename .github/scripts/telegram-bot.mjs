@@ -84,10 +84,18 @@ for (const post of channelPosts) {
 
   const postBody = body || rawTitle;
 
+  const tags = [
+    ...new Set(
+      (post.text.match(/#(\w+)/g) || []).map((t) => t.slice(1).toLowerCase()),
+    ),
+  ].sort();
+
+  const tagsJson = JSON.stringify(tags);
+
   const frontmatter = `---
 title: "${title}"
 publishedDate: ${dateStr}
-tags: []
+tags: ${tagsJson}
 description: "${title}"
 draft: false
 ---
