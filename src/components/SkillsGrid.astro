@@ -1,17 +1,27 @@
 ---
+import type { Locale } from "@/i18n";
+import { t, localeData } from "@/i18n";
+import type { Skill } from "@/data/skills";
 import { skills } from "@/data/skills";
 import SkillCard from "./SkillCard.astro";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const skillList: Skill[] = localeData(skills, locale);
 ---
 
 <section id="skills" class="py-24 bg-[var(--color-bg-secondary)]">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-[var(--color-text-primary)] text-4xl sm:text-5xl font-bold text-center mb-16 fade-in-section">
-      What I've Learned
+      {t("skills.title", locale)}
     </h2>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {skills.map((skill) => (
-        <SkillCard skill={skill} />
+      {skillList.map((skill: Skill) => (
+        <SkillCard skill={skill} locale={locale} />
       ))}
     </div>
   </div>

@@ -1,9 +1,6 @@
-export interface FaqEntry {
-  question: string;
-  answer: string;
-}
+import type { FaqEntry } from "./types";
 
-export const faq: FaqEntry[] = [
+export const faqEn: FaqEntry[] = [
   {
     question: "Tell me about your AI project",
     answer:
@@ -34,4 +31,4 @@ export const faq: FaqEntry[] = [
     answer:
       "Yes, I am based in London, UK, and have full rights to work here. I am actively seeking opportunities to contribute to innovative projects.",
   },
-] as const;
+];

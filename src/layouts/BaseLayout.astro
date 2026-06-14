@@ -1,32 +1,35 @@
 ---
+import type { Locale } from "@/i18n";
+import { locales } from "@/i18n";
 import { profile } from "@/data/profile";
 import "@/styles/global.css";
 
-const { title, description } = Astro.props as {
+const { title, description, locale = "en" } = Astro.props as {
   title?: string;
   description?: string;
+  locale?: Locale;
 };
 
-const pageTitle = title || `${profile.name} - ${profile.title}`;
-const pageDescription = description || profile.summary;
+const pageTitle = title || `${profile.name} - ${profile.title[locale]}`;
+const pageDescription = description || profile.summary[locale];
 const basePath = profile.base;
 const siteUrl = `${Astro.site?.origin}${basePath}`;
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang={locale} class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
-    <meta name="author" content={profile.name} />
+    <meta name="author" content={locale === "uk" ? profile.nameUk : profile.name} />
 
     <!-- Open Graph -->
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={siteUrl} />
+    <meta property="og:url" content={`${siteUrl}/${locale}/`} />
     <meta property="og:image" content={`${siteUrl}/assets/og-image.png`} />
 
     <!-- Twitter Card -->
@@ -34,11 +37,19 @@ const siteUrl = `${Astro.site?.origin}${basePath}`;
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDescription} />
 
+    <!-- Canonical / hreflang -->
+    <link rel="canonical" href={`${siteUrl}/${locale}/`} />
+    {locales.map((l) => (
+      <link rel="alternate" hreflang={l} href={`${siteUrl}/${l}/`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`${siteUrl}/en/`} />
+
     <!-- PWA -->
     <link rel="manifest" href={`${basePath}/manifest.json`} />
     <link rel="icon" type="image/svg+xml" href={`${basePath}/assets/icon-512.svg`} />
     <meta name="theme-color" content="#000000" />
     <meta name="base-path" content={basePath} />
+    <meta name="current-locale" content={locale} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -53,14 +64,14 @@ const siteUrl = `${Astro.site?.origin}${basePath}`;
       "@context": "https://schema.org",
       "@type": "Person",
       name: profile.name,
-      jobTitle: profile.title,
+      jobTitle: profile.title.en,
       email: profile.email,
       telephone: profile.phone,
       address: {
         "@type": "PostalAddress",
-        addressLocality: profile.location,
+        addressLocality: profile.location.en,
       },
-      url: siteUrl,
+      url: `${siteUrl}/en/`,
       sameAs: [profile.linkedin, profile.github],
     })}>
     </script>

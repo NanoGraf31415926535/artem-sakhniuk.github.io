@@ -1,9 +1,21 @@
 ---
+import type { Locale } from "@/i18n";
+
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 import "@/styles/blog.css";
+
+export function getStaticPaths() {
+  return [
+    { params: { locale: "en" } },
+    { params: { locale: "uk" } },
+    { params: { locale: "de" } },
+  ];
+}
+
+const { locale } = Astro.params as { locale: Locale };
 
 const allPosts = await getCollection("blog");
 
@@ -17,21 +29,22 @@ const publishedPosts = allPosts
 
 const allTags = [...new Set(publishedPosts.flatMap((p: CollectionEntry<"blog">) => p.data.tags))].sort();
 
-// tag frequency map for sidebar
 const tagFreq: Record<string, number> = {};
 publishedPosts.forEach((p: CollectionEntry<"blog">) =>
   p.data.tags.forEach((t: string) => { tagFreq[t] = (tagFreq[t] || 0) + 1; })
 );
 const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
+
+const base = "/artem-sakhniuk.github.io";
 ---
 
-<BaseLayout title="Blog - Artem Sakhniuk" description="Articles and thoughts from Artem Sakhniuk">
-  <Header />
+<BaseLayout locale={locale} title={"Blog - Artem Sakhniuk"} description={"Articles and thoughts from Artem Sakhniuk"}>
+  <Header locale={locale} />
 
   <main class="blog-terminal min-h-screen pt-24 pb-16">
     <div class="blog-outer">
 
-      <!-- ══ MAIN COLUMN ══════════════════════════════════════════ -->
+      <!-- MAIN COLUMN -->
       <div class="blog-main">
 
         <!-- manpage-style header -->
@@ -76,7 +89,7 @@ const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
           </div>
         )}
 
-        <!-- ls-style column header (desktop only) -->
+        <!-- ls-style column header -->
         <div class="term-section-label mb-1">POSTS</div>
         <div class="ls-header">
           <span class="ls-col-num">#</span>
@@ -92,14 +105,13 @@ const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
           ) : (
             publishedPosts.map((post: any, i: number) => (
               <a
-                href={`/artem-sakhniuk.github.io/blog/${post.slug}/`}
+                href={`${base}/${locale}/blog/${post.slug}/`}
                 class="blog-card term-card"
                 data-tags={post.data.tags.join(",")}
                 data-title={post.data.title.toLowerCase()}
                 data-description={(post.data.description || "").toLowerCase()}
               >
                 <article>
-                  <!-- desktop: ls-row layout -->
                   <div class="ls-row">
                     <span class="ls-linenum">{String(i + 1).padStart(3, '0')}</span>
                     <span class="ls-perm">-rw-r--r--</span>
@@ -112,7 +124,6 @@ const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
                     </div>
                   </div>
 
-                  <!-- description + tags (always visible, indented) -->
                   {post.data.description && (
                     <div class="term-card-meta">
                       <span class="ls-meta-indent"></span>
@@ -149,7 +160,7 @@ const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
       </div><!-- /blog-main -->
 
 
-      <!-- ══ SIDEBAR (desktop only) ════════════════════════════════ -->
+      <!-- SIDEBAR -->
       <aside class="blog-sidebar" aria-label="Terminal sidebar">
 
         <!-- clock panel -->
@@ -166,7 +177,7 @@ const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
 
         <!-- stats panel -->
         <div class="sb-panel">
-          <div class="sb-panel-top">┌─ blog::stats ┐</div>
+          <div class="sb-panel-top">┌─ blog::stats ─┐</div>
           <div class="sb-panel-body">
             <div class="sb-stat-row">
               <span class="sb-stat-key">posts</span>
@@ -224,7 +235,7 @@ const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
     </div><!-- /blog-outer -->
   </main>
 
-  <Footer />
+  <Footer locale={locale} />
 </BaseLayout>
 
 <script src="@/scripts/blog.js"></script>

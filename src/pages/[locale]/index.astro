@@ -1,0 +1,39 @@
+---
+import type { Locale } from "@/i18n";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/Header.astro";
+import Hero from "@/components/Hero.astro";
+import About from "@/components/About.astro";
+import FunFacts from "@/components/FunFacts.astro";
+import Timeline from "@/components/Timeline.astro";
+import SkillsGrid from "@/components/SkillsGrid.astro";
+import Projects from "@/components/Projects.astro";
+import Contact from "@/components/Contact.astro";
+import Footer from "@/components/Footer.astro";
+import AiChat from "@/components/AiChat.astro";
+import ScrollTop from "@/components/ScrollTop.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { locale: "en" } },
+    { params: { locale: "uk" } },
+    { params: { locale: "de" } },
+  ];
+}
+
+const { locale } = Astro.params as { locale: Locale };
+---
+
+<BaseLayout locale={locale}>
+  <Header locale={locale} />
+  <Hero locale={locale} />
+  <About locale={locale} />
+  <FunFacts locale={locale} />
+  <Timeline locale={locale} />
+  <SkillsGrid locale={locale} />
+  <Projects locale={locale} />
+  <Contact locale={locale} />
+  <Footer locale={locale} />
+  <AiChat locale={locale} />
+  <ScrollTop />
+</BaseLayout>

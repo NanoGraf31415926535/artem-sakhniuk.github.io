@@ -1,6 +1,16 @@
 ---
+import type { Locale } from "@/i18n";
+import { t, localeData } from "@/i18n";
+import type { FunFact } from "@/data/funFacts";
 import { funFacts } from "@/data/funFacts";
 import { Icon } from "astro-icon/components";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const facts: FunFact[] = localeData(funFacts, locale);
 ---
 
 <div class="max-w-2xl mx-auto mt-12 fade-in-section">
@@ -11,11 +21,11 @@ import { Icon } from "astro-icon/components";
     ]}
   >
     <h3 class="text-xl font-bold text-[var(--color-text-primary)] mb-6">
-      Did You Know?
+      {t("funFacts.title", locale)}
     </h3>
 
     <div class="relative h-24 overflow-hidden" id="fun-fact-carousel">
-      {funFacts.map((fact, i) => (
+      {facts.map((fact: FunFact, i: number) => (
         <div
           class="fun-fact absolute inset-0 flex flex-col items-center justify-center transition-all duration-500"
           class:list={[
@@ -33,7 +43,7 @@ import { Icon } from "astro-icon/components";
     </div>
 
     <div class="flex justify-center gap-2 mt-4" id="fun-fact-dots">
-      {funFacts.map((_, i) => (
+      {facts.map((_: FunFact, i: number) => (
         <button
           class="w-2 h-2 rounded-full transition-all duration-300 cursor-pointer"
           class:list={[

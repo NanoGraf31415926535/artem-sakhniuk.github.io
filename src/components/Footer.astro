@@ -1,6 +1,14 @@
 ---
+import type { Locale } from "@/i18n";
+import { t } from "@/i18n";
 import { profile } from "@/data/profile";
 import { Icon } from "astro-icon/components";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
 ---
 
 <footer
@@ -11,7 +19,7 @@ import { Icon } from "astro-icon/components";
 >
   <div class="max-w-6xl mx-auto px-4">
     <p class="text-sm text-[var(--color-text-tertiary)] mb-3">
-      &copy; {new Date().getFullYear()} {profile.name}. Built with passion and modern web technologies.
+      {t("footer.builtWith", locale).replace("{year}", String(new Date().getFullYear())).replace("{name}", locale === "uk" ? profile.nameUk : profile.name)}
     </p>
     <a
       href={profile.repo}
@@ -23,7 +31,7 @@ import { Icon } from "astro-icon/components";
       ]}
     >
       <Icon name="lucide:external-link" class="w-4 h-4" />
-      View Source Code on GitHub
+      {t("footer.viewSource", locale)}
     </a>
   </div>
 </footer>

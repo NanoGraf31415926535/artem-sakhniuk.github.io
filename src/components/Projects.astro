@@ -1,16 +1,26 @@
 ---
+import type { Locale } from "@/i18n";
+import { t, localeData } from "@/i18n";
+import type { Project } from "@/data/projects";
 import { projects } from "@/data/projects";
 import { Icon } from "astro-icon/components";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const projectList: Project[] = localeData(projects, locale);
 ---
 
 <section id="projects" class="py-24 bg-[var(--color-bg-main)]">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-[var(--color-text-primary)] text-4xl sm:text-5xl font-bold text-center mb-16 fade-in-section">
-      My Projects
+      {t("projects.title", locale)}
     </h2>
 
     <div class="grid md:grid-cols-2 gap-8">
-      {projects.map((project) => (
+      {projectList.map((project: Project) => (
         <div
           class="project-card fade-in-section rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2"
           class:list={["bg-[var(--color-card-bg)] shadow-lg shadow-[var(--color-card-shadow)]"]}
@@ -31,7 +41,7 @@ import { Icon } from "astro-icon/components";
               {project.description}
             </p>
             <div class="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
+              {project.tags.map((tag: string) => (
                 <span
                   class="px-3 py-1 text-xs font-medium rounded-full"
                   class:list={[

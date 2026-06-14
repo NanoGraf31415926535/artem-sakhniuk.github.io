@@ -1,6 +1,14 @@
 ---
+import type { Locale } from "@/i18n";
+import { t } from "@/i18n";
 import Hero3D from "./Hero3D.astro";
 import { profile } from "@/data/profile";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
 ---
 
 <section
@@ -12,31 +20,31 @@ import { profile } from "@/data/profile";
   <!-- Blend layer -->
   <div class="absolute inset-0 z-[1] bg-[var(--color-bg-main)]/55 dark:bg-black/55 backdrop-blur-lg"></div>
 
-  <!-- Content column — pt-16 clears the fixed 64px header -->
+  <!-- Content column -->
   <div class="relative z-10 w-full max-w-2xl mx-auto px-6 sm:px-8 pt-16 flex flex-col items-center text-center gap-0">
 
     <!-- Eyebrow -->
     <span class="hero-eyebrow inline-flex items-center gap-2 text-xs sm:text-sm font-mono font-medium tracking-[0.18em] uppercase text-[var(--color-text-tertiary)] mb-5">
       <span class="hero-dot"></span>
-      Available for freelance
+      {t("hero.available", locale)}
       <span class="hero-dot"></span>
     </span>
 
     <!-- Name -->
     <h1 class="hero-name text-[clamp(2.4rem,8vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight mb-4">
-      {profile.name}
+      {locale === "uk" ? profile.nameUk : profile.name}
     </h1>
 
     <!-- Title + location -->
     <p class="text-base sm:text-xl text-[var(--color-text-secondary)] font-medium mb-3">
-      {profile.title}
+      {profile.title[locale]}
       <span class="hero-location-sep mx-2 opacity-30">·</span>
-      {profile.location}
+      {profile.location[locale]}
     </p>
 
     <!-- Summary -->
     <p class="text-sm sm:text-base text-[var(--color-text-secondary)] max-w-md mx-auto leading-relaxed mb-8 opacity-80">
-      {profile.summary}
+      {profile.summary[locale]}
     </p>
 
     <!-- Divider -->
@@ -48,20 +56,20 @@ import { profile } from "@/data/profile";
         href="#about"
         class="hero-btn-primary gradient-bg px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold text-center transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
       >
-        Discover My Journey
+        {t("hero.discoverJourney", locale)}
       </a>
       <button
         id="open-ai-chat-btn"
         class="hero-btn-secondary px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold border backdrop-blur-sm transition-all duration-300 cursor-pointer border-[var(--color-text-secondary)]/40 text-[var(--color-text-secondary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-bg-main)] hover:border-transparent"
       >
-        Ask Artem AI
+        {t("hero.askAi", locale)}
       </button>
       <a
         href={profile.cvPath}
         download="Artem_Sakhniuk_CV.pdf"
         class="hero-btn-ghost px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold border backdrop-blur-sm transition-all duration-300 border-[var(--color-border-light)] text-[var(--color-text-secondary)]/70 hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
       >
-        Download CV
+        {t("hero.downloadCv", locale)}
       </a>
     </div>
   </div>
@@ -75,7 +83,6 @@ import { profile } from "@/data/profile";
 </section>
 
 <style>
-  /* ── Gradient name ─────────────────────────────────────────────────────── */
   .hero-name {
     background: linear-gradient(
       135deg,
@@ -96,7 +103,6 @@ import { profile } from "@/data/profile";
     100% { background-position: 0%   50%; }
   }
 
-  /* ── Eyebrow dots ──────────────────────────────────────────────────────── */
   .hero-dot {
     display: inline-block;
     width: 5px;
@@ -106,12 +112,10 @@ import { profile } from "@/data/profile";
     opacity: 0.7;
   }
 
-  /* ── Divider ───────────────────────────────────────────────────────────── */
   .hero-divider {
     opacity: 0.5;
   }
 
-  /* ── Scroll mouse indicator ────────────────────────────────────────────── */
   .hero-scroll-mouse {
     width: 22px;
     height: 34px;
@@ -144,7 +148,6 @@ import { profile } from "@/data/profile";
     50%       { transform: translateY(4px); }
   }
 
-  /* ── Button touch targets ──────────────────────────────────────────────── */
   @media (max-width: 639px) {
     .hero-btn-primary,
     .hero-btn-secondary,
@@ -156,7 +159,6 @@ import { profile } from "@/data/profile";
     }
   }
 
-  /* ── Reduce motion ─────────────────────────────────────────────────────── */
   @media (prefers-reduced-motion: reduce) {
     .hero-name { animation: none; }
     .hero-scroll-mouse,

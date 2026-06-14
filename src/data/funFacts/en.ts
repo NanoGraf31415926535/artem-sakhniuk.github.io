@@ -1,9 +1,6 @@
-export interface FunFact {
-  icon: string;
-  text: string;
-}
+import type { FunFact } from "./types";
 
-export const funFacts: FunFact[] = [
+export const funFactsEn: FunFact[] = [
   {
     icon: "lucide:dna",
     text: "Combined Biology and Programming to create a Genomic Data Visualization Tool",
@@ -20,4 +17,4 @@ export const funFacts: FunFact[] = [
     icon: "lucide:mountain",
     text: "Avid hiker who has explored many trails across the UK",
   },
-] as const;
+];

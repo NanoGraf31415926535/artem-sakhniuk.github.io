@@ -1,11 +1,6 @@
-export interface TimelineEntry {
-  id: number;
-  period: string;
-  title: string;
-  description: string;
-}
+import type { TimelineEntry } from "./types";
 
-export const timeline: TimelineEntry[] = [
+export const timelineEn: TimelineEntry[] = [
   {
     id: 1,
     period: "2019 - 2023",
@@ -48,4 +43,4 @@ export const timeline: TimelineEntry[] = [
     description:
       "Spearheading the development of an educational platform using Flask and React, increasing course completion rates by 25%. Integrating third-party APIs to enhance platform functionality. Utilizing Agile methodologies to manage project timelines effectively.",
   },
-] as const;
+];

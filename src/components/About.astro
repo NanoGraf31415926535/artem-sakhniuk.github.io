@@ -1,11 +1,19 @@
 ---
+import type { Locale } from "@/i18n";
+import { t } from "@/i18n";
 import { profile } from "@/data/profile";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
 ---
 
 <section id="about" class="py-24 bg-[var(--color-bg-secondary)]">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-[var(--color-text-primary)] text-4xl sm:text-5xl font-bold text-center mb-16 fade-in-section">
-      About Me
+      {t("about.title", locale)}
     </h2>
 
     <div class="grid md:grid-cols-[300px_1fr] gap-12 items-center">
@@ -21,7 +29,7 @@ import { profile } from "@/data/profile";
       </div>
 
       <div class="fade-in-section space-y-5">
-        {profile.about.map((paragraph) => (
+        {profile.about[locale].map((paragraph) => (
           <p class="text-[var(--color-text-secondary)] leading-relaxed text-base sm:text-lg">
             {paragraph}
           </p>
@@ -32,7 +40,6 @@ import { profile } from "@/data/profile";
 </section>
 
 <script>
-  // Fade-in observer
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

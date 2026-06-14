@@ -1,28 +1,28 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Header from "@/components/Header.astro";
-import Hero from "@/components/Hero.astro";
-import About from "@/components/About.astro";
-import FunFacts from "@/components/FunFacts.astro";
-import Timeline from "@/components/Timeline.astro";
-import SkillsGrid from "@/components/SkillsGrid.astro";
-import Projects from "@/components/Projects.astro";
-import Contact from "@/components/Contact.astro";
-import Footer from "@/components/Footer.astro";
-import AiChat from "@/components/AiChat.astro";
-import ScrollTop from "@/components/ScrollTop.astro";
+import { profile } from "@/data/profile";
+const base = profile.base;
+const redirectUrl = base + "/en/";
 ---
 
-<BaseLayout>
-  <Header />
-  <Hero />
-  <About />
-  <FunFacts />
-  <Timeline />
-  <SkillsGrid />
-  <Projects />
-  <Contact />
-  <Footer />
-  <AiChat />
-  <ScrollTop />
-</BaseLayout>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{profile.name} - {profile.title.en}</title>
+  <meta http-equiv="refresh" content={"0; url=" + redirectUrl} />
+  <meta name="base-path" content={base} />
+</head>
+<body>
+  <p>Redirecting to <a href={redirectUrl}>{profile.name}</a>...</p>
+  <script>
+    (function() {
+      var base = document.querySelector('meta[name="base-path"]')?.getAttribute("content") || "";
+      var lang = (navigator.language || "en").substring(0, 2);
+      var supported = ["en", "uk", "de"];
+      if (supported.indexOf(lang) === -1) lang = "en";
+      window.location.replace(base + "/" + lang + "/");
+    })();
+  </script>
+</body>
+</html>

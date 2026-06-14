@@ -1,12 +1,6 @@
-export interface Project {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-  tags: string[];
-}
+import type { Project } from "./types";
 
-export const projects: Project[] = [
+export const projectsEn: Project[] = [
   {
     id: "code-registry",
     icon: "lucide:globe",
@@ -39,4 +33,4 @@ export const projects: Project[] = [
       "Spearheading the development of an educational platform using Flask and React, designed to improve course completion rates through enhanced user engagement. Integrating third-party APIs to extend functionality and collaborating with educational experts to align features with pedagogical goals. Using Agile methodologies to ensure timely delivery of features.",
     tags: ["Flask", "React", "PostgreSQL", "REST APIs", "Agile"],
   },
-] as const;
+];

@@ -1,13 +1,6 @@
-export interface Skill {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-  percentage: number;
-  details: string;
-}
+import type { Skill } from "./types";
 
-export const skills: Skill[] = [
+export const skillsEn: Skill[] = [
   {
     id: "core-languages",
     icon: "lucide:terminal",
@@ -80,4 +73,4 @@ export const skills: Skill[] = [
     details:
       "Artem has led development teams and mentored junior developers. He has experience in Scrum/Agile project management, cross-functional collaboration, and technical planning. He trained junior developers and mentored interns in full-stack development best practices.",
   },
-] as const;
+];

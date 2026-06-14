@@ -1,12 +1,20 @@
 ---
+import type { Locale } from "@/i18n";
+import { t } from "@/i18n";
 import { profile } from "@/data/profile";
 import { Icon } from "astro-icon/components";
+
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
 ---
 
 <section id="contact" class="py-24 bg-[var(--color-bg-secondary)]">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-[var(--color-text-primary)] text-4xl sm:text-5xl font-bold text-center mb-16 fade-in-section">
-      Let's Connect
+      {t("contact.title", locale)}
     </h2>
 
     <div class="grid md:grid-cols-[300px_1fr] gap-12 fade-in-section">
@@ -24,7 +32,7 @@ import { Icon } from "astro-icon/components";
             class="w-5 h-5 text-[var(--color-text-secondary)]"
           />
           <span class="text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
-            Email Me
+            {t("contact.emailMe", locale)}
           </span>
         </a>
 
@@ -42,7 +50,7 @@ import { Icon } from "astro-icon/components";
             class="w-5 h-5 text-[var(--color-text-secondary)]"
           />
           <span class="text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
-            LinkedIn
+            {t("contact.linkedin", locale)}
           </span>
         </a>
 
@@ -60,7 +68,7 @@ import { Icon } from "astro-icon/components";
             class="w-5 h-5 text-[var(--color-text-secondary)]"
           />
           <span class="text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
-            GitHub
+            {t("contact.github", locale)}
           </span>
         </a>
 
@@ -76,7 +84,7 @@ import { Icon } from "astro-icon/components";
             class="w-5 h-5 text-[var(--color-text-secondary)]"
           />
           <span class="text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors">
-            Call Me
+            {t("contact.callMe", locale)}
           </span>
         </a>
       </div>
@@ -91,7 +99,7 @@ import { Icon } from "astro-icon/components";
       >
         <div>
           <label for="name" class="block text-sm font-medium mb-2 text-[var(--color-text-primary)]">
-            Your Name
+            {t("contact.yourName", locale)}
           </label>
           <input
             type="text"
@@ -107,7 +115,7 @@ import { Icon } from "astro-icon/components";
 
         <div>
           <label for="email" class="block text-sm font-medium mb-2 text-[var(--color-text-primary)]">
-            Your Email
+            {t("contact.yourEmail", locale)}
           </label>
           <input
             type="email"
@@ -123,7 +131,7 @@ import { Icon } from "astro-icon/components";
 
         <div>
           <label for="subject" class="block text-sm font-medium mb-2 text-[var(--color-text-primary)]">
-            Subject
+            {t("contact.subject", locale)}
           </label>
           <input
             type="text"
@@ -139,7 +147,7 @@ import { Icon } from "astro-icon/components";
 
         <div>
           <label for="message" class="block text-sm font-medium mb-2 text-[var(--color-text-primary)]">
-            Message
+            {t("contact.message", locale)}
           </label>
           <textarea
             id="message"
@@ -157,7 +165,7 @@ import { Icon } from "astro-icon/components";
           type="submit"
           class="w-full py-3 rounded-full font-semibold transition-all duration-300 gradient-bg hover:scale-[1.02] hover:shadow-lg active:scale-95"
         >
-          Send Message
+          {t("contact.sendMessage", locale)}
         </button>
       </form>
     </div>

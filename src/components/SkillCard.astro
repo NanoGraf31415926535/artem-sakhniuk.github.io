@@ -1,12 +1,15 @@
 ---
+import type { Locale } from "@/i18n";
+import { t } from "@/i18n";
 import type { Skill } from "@/data/skills";
 import { Icon } from "astro-icon/components";
 
 export interface Props {
   skill: Skill;
+  locale: Locale;
 }
 
-const { skill } = Astro.props;
+const { skill, locale } = Astro.props;
 ---
 
 <div
@@ -42,12 +45,11 @@ const { skill } = Astro.props;
     ]}
     data-skill={skill.id}
   >
-    Learn More
+    {t("skills.learnMore", locale)}
   </button>
 </div>
 
 <script>
-  // Progress bar animation
   const progressObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -69,7 +71,6 @@ const { skill } = Astro.props;
     .querySelectorAll(".skill-card")
     .forEach((card) => progressObserver.observe(card));
 
-  // Skill info button → open AI chat
   document.querySelectorAll(".skill-info-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const skillType = btn.getAttribute("data-skill");
@@ -80,7 +81,6 @@ const { skill } = Astro.props;
     });
   });
 
-  // Fade-in for skill cards
   const fadeObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {

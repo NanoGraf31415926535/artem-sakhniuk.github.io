@@ -1,16 +1,24 @@
 ---
+import type { Locale } from "@/i18n";
+import { locales, t, localeLabel } from "@/i18n";
 import { profile } from "@/data/profile";
 import { Icon } from "astro-icon/components";
 
+export interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
 const base = profile.base;
+
 const navItems = [
-  { label: "Home", href: `${base}/` },
-  { label: "About", href: `${base}/#about` },
-  { label: "Journey", href: `${base}/#journey` },
-  { label: "Skills", href: `${base}/#skills` },
-  { label: "Projects", href: `${base}/#projects` },
-  { label: "Blog", href: `${base}/blog/` },
-  { label: "Contact", href: `${base}/#contact` },
+  { labelKey: "nav.home", href: `${base}/${locale}/` },
+  { labelKey: "nav.about", href: `${base}/${locale}/#about` },
+  { labelKey: "nav.journey", href: `${base}/${locale}/#journey` },
+  { labelKey: "nav.skills", href: `${base}/${locale}/#skills` },
+  { labelKey: "nav.projects", href: `${base}/${locale}/#projects` },
+  { labelKey: "nav.blog", href: `${base}/${locale}/blog/` },
+  { labelKey: "nav.contact", href: `${base}/${locale}/#contact` },
 ];
 ---
 
@@ -21,8 +29,8 @@ const navItems = [
   <div
     class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16"
   >
-    <a href={`${base}/`} class="text-[var(--color-text-primary)] text-xl font-bold tracking-tight">
-      {profile.name}
+    <a href={`${base}/${locale}/`} class="text-[var(--color-text-primary)] text-xl font-bold tracking-tight">
+      {locale === "uk" ? profile.nameUk : profile.name}
     </a>
 
     <!-- Desktop Nav -->
@@ -35,9 +43,26 @@ const navItems = [
             "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
           ]}
         >
-          {item.label}
+          {t(item.labelKey, locale)}
         </a>
       ))}
+
+      <!-- Language Switcher -->
+      <div class="flex items-center gap-1 border-l border-[var(--color-border-light)] pl-4">
+        {locales.map((l) => (
+          <a
+            href={`${base}/${l}/`}
+            class="px-2 py-1 text-xs font-mono font-medium rounded transition-colors duration-200"
+            class:list={[
+              l === locale
+                ? "text-[var(--color-text-primary)] bg-[var(--color-bg-tertiary)]"
+                : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)]",
+            ]}
+          >
+            {localeLabel(l)}
+          </a>
+        ))}
+      </div>
 
       <!-- Theme Toggle -->
       <button
@@ -46,7 +71,7 @@ const navItems = [
         class:list={[
           "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
         ]}
-        aria-label="Toggle theme"
+        aria-label={t("aiChat.open", locale)}
       >
         <Icon name="lucide:sun" class="w-5 h-5 hidden dark:block" />
         <Icon name="lucide:moon" class="w-5 h-5 block dark:hidden" />
@@ -55,13 +80,29 @@ const navItems = [
 
     <!-- Mobile Menu Button -->
     <div class="flex md:hidden items-center gap-3">
+      <!-- Language Switcher (mobile) -->
+      <div class="flex items-center gap-1">
+        {locales.map((l) => (
+          <a
+            href={`${base}/${l}/`}
+            class="px-1.5 py-0.5 text-xs font-mono font-medium rounded transition-colors duration-200"
+            class:list={[
+              l === locale
+                ? "text-[var(--color-text-primary)] bg-[var(--color-bg-tertiary)]"
+                : "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)]",
+            ]}
+          >
+            {localeLabel(l)}
+          </a>
+        ))}
+      </div>
       <button
         id="theme-toggle-mobile"
         class="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
         class:list={[
           "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
         ]}
-        aria-label="Toggle theme"
+        aria-label={t("aiChat.open", locale)}
       >
         <Icon name="lucide:sun" class="w-5 h-5 hidden dark:block" />
         <Icon name="lucide:moon" class="w-5 h-5 block dark:hidden" />
@@ -72,7 +113,7 @@ const navItems = [
         class:list={[
           "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-tertiary)]",
         ]}
-        aria-label="Open menu"
+        aria-label={t("aiChat.open", locale)}
       >
         <Icon name="lucide:menu" class="w-6 h-6" />
       </button>
@@ -91,7 +132,7 @@ const navItems = [
         class:list={[
           "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
         ]}
-        aria-label="Close menu"
+        aria-label={t("aiChat.close", locale)}
       >
         <Icon name="lucide:x" class="w-6 h-6" />
       </button>
@@ -105,7 +146,7 @@ const navItems = [
             "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]",
           ]}
         >
-          {item.label}
+          {t(item.labelKey, locale)}
         </a>
       ))}
     </nav>
