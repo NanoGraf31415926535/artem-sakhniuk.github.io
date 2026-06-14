@@ -2,8 +2,8 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { Icon } from "astro-icon/components";
 import { getCollection, type CollectionEntry } from "astro:content";
+import "@/styles/blog.css";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -15,12 +15,14 @@ export async function getStaticPaths() {
     }));
 }
 
-type Props = {
-  post: CollectionEntry<"blog">;
-};
-
+type Props = { post: CollectionEntry<"blog"> };
 const { post } = Astro.props as Props;
 const { Content } = await post.render();
+
+const dateStr = post.data.publishedDate.toLocaleDateString("en-US", {
+  year: "numeric", month: "long", day: "numeric",
+});
+const slugStr = post.slug;
 ---
 
 <BaseLayout
@@ -29,58 +31,215 @@ const { Content } = await post.render();
 >
   <Header />
 
-  <main class="min-h-screen pt-24 pb-16">
-    <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-8">
-        <a
-          href="/artem-sakhniuk.github.io/blog/"
-          class="inline-flex items-center gap-1.5 text-sm transition-colors duration-200"
-          class:list={[
-            "text-[var(--color-text-tertiary)] hover:text-[var(--color-text-primary)]",
-          ]}
-        >
-          <Icon name="lucide:arrow-left" class="w-4 h-4" />
-          Back to blog
-        </a>
-      </div>
+  <main class="post-terminal min-h-screen pt-24 pb-16">
+    <div class="post-outer">
 
-      <header class="mb-8">
-        <h1 class="text-3xl sm:text-4xl font-bold mb-3">
-          {post.data.title}
-        </h1>
+      <!-- ══ ARTICLE ══════════════════════════════════════════════ -->
+      <div class="post-main">
 
-        <div class="flex items-center gap-2 text-sm text-[var(--color-text-tertiary)]">
-          <Icon name="lucide:calendar" class="w-4 h-4" />
-          <time datetime={post.data.publishedDate.toISOString()}>
-            {post.data.publishedDate.toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </time>
+        <!-- back link -->
+        <div class="post-back mb-6">
+          <a href="/artem-sakhniuk.github.io/blog/" class="post-back-link">
+            <span>←</span> cd ../blog
+          </a>
         </div>
 
-        {post.data.tags.length > 0 && (
-          <div class="flex flex-wrap gap-2 mt-4">
-            {post.data.tags.map((tag: string) => (
-              <span
-                class="px-2.5 py-0.5 text-xs font-medium rounded-full"
-                class:list={[
-                  "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
-                ]}
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </header>
+        <!-- manpage top bar -->
+        <div class="post-top-bar mb-6">
+          <span class="post-cmd">{post.data.title.toLowerCase().replace(/\s+/g, '-')}(7)</span>
+          <span class="post-center">ARTEM SAKHNIUK</span>
+          <span class="post-cmd">{post.data.publishedDate.getFullYear()}</span>
+        </div>
 
-      <div class="blog-content max-w-none">
-        <Content />
-      </div>
-    </article>
+        <!-- manpage header block -->
+        <header class="post-header mb-8">
+          <div class="post-field-row">
+            <span class="post-field-key">NAME</span>
+            <span class="post-field-sep">│</span>
+            <h1 class="post-title">{post.data.title}</h1>
+          </div>
+          <div class="post-field-row">
+            <span class="post-field-key">DATE</span>
+            <span class="post-field-sep">│</span>
+            <time class="post-field-val" datetime={post.data.publishedDate.toISOString()}>{dateStr}</time>
+          </div>
+          {post.data.description && (
+            <div class="post-field-row">
+              <span class="post-field-key">DESC</span>
+              <span class="post-field-sep">│</span>
+              <span class="post-field-val post-field-desc">{post.data.description}</span>
+            </div>
+          )}
+          {post.data.tags.length > 0 && (
+            <div class="post-field-row">
+              <span class="post-field-key">TAGS</span>
+              <span class="post-field-sep">│</span>
+              <span class="post-field-tags">
+                {post.data.tags.map((tag: string) => (
+                  <span class="post-tag">[{tag}]</span>
+                ))}
+              </span>
+            </div>
+          )}
+        </header>
+
+        <div class="post-divider-label">CONTENT</div>
+        <div class="post-rule mb-8"></div>
+
+        <!-- article body -->
+        <div class="blog-content post-prose" id="post-prose">
+          <Content />
+        </div>
+
+        <!-- EOF -->
+        <div class="post-eof mt-12">
+          <div class="post-rule mb-4"></div>
+          <div class="post-eof-line">
+            <span class="post-eof-text">// end of document &nbsp;·&nbsp; {slugStr}</span>
+            <a href="/artem-sakhniuk.github.io/blog/" class="post-back-link">← cd ../blog</a>
+          </div>
+          <div class="post-footer-line mt-4">
+            <span class="post-prompt">$</span>
+            <span class="post-blink">_</span>
+          </div>
+        </div>
+
+      </div><!-- /post-main -->
+
+
+      <!-- ══ SIDEBAR (desktop only) ════════════════════════════════ -->
+      <aside class="post-sidebar" aria-label="Post sidebar">
+
+        <!-- meta panel -->
+        <div class="sb-panel">
+          <div class="sb-panel-top">┌─ post::meta ─┐</div>
+          <div class="sb-panel-body">
+            <div class="sb-meta-label">file</div>
+            <div class="sb-meta-val sb-meta-file">{slugStr}.md</div>
+            <div class="sb-meta-label" style="margin-top:0.5rem">modified</div>
+            <div class="sb-meta-val">{dateStr}</div>
+            {post.data.tags.length > 0 && (
+              <>
+                <div class="sb-meta-label" style="margin-top:0.5rem">tags</div>
+                <div class="sb-meta-tags">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="sb-tag">[{tag}]</span>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+        <!-- TOC panel — populated by JS -->
+        <div class="sb-panel" id="sb-toc-panel" style="display:none">
+          <div class="sb-panel-top">┌─ toc ────────┐</div>
+          <div class="sb-panel-body" id="sb-toc-body"></div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+        <!-- reading progress -->
+        <div class="sb-panel">
+          <div class="sb-panel-top">┌─ progress ───┐</div>
+          <div class="sb-panel-body">
+            <div class="sb-prog-track">
+              <div id="sb-prog-fill" class="sb-prog-fill" style="width:0%"></div>
+            </div>
+            <div class="sb-prog-label">
+              <span id="sb-prog-pct">0%</span> read
+            </div>
+          </div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+        <!-- clock -->
+        <div class="sb-panel">
+          <div class="sb-panel-top">┌─ sys::clock ─┐</div>
+          <div class="sb-panel-body">
+            <div class="sb-clock-label">local time</div>
+            <div id="sb-clock" class="sb-clock">--:--:--</div>
+          </div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+      </aside>
+
+    </div><!-- /post-outer -->
   </main>
+
 
   <Footer />
 </BaseLayout>
+
+<script>
+  // ── live clock ────────────────────────────────────────────────
+  function updateClock() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+    const el = document.getElementById("sb-clock");
+    if (el) el.textContent = `${hh}:${mm}:${ss}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // ── build TOC from headings ──────────────────────────────────
+  const prose   = document.getElementById("post-prose");
+  const tocBody = document.getElementById("sb-toc-body");
+  const tocPanel = document.getElementById("sb-toc-panel");
+
+  if (prose && tocBody && tocPanel) {
+    const headings = Array.from(prose.querySelectorAll<HTMLElement>("h2, h3, h4"));
+
+    if (headings.length >= 2) {
+      tocPanel.style.display = "";
+
+      headings.forEach((h, i) => {
+        // give headings an id if they don't have one
+        if (!h.id) h.id = `h-${i}-${h.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') || i}`;
+
+        const link = document.createElement("a");
+        link.href = `#${h.id}`;
+        link.className = "sb-toc-link" + (h.tagName === "H3" ? " sb-toc-h3" : h.tagName === "H4" ? " sb-toc-h4" : "");
+
+        // strip the ##/###/#### prefix that CSS ::before adds (it's visual only, not in textContent)
+        link.textContent = h.textContent?.replace(/^#+\s*/, "") || "";
+        link.title = link.textContent;
+        tocBody.appendChild(link);
+      });
+
+      // ── scroll spy ─────────────────────────────────────────
+      const links = tocBody.querySelectorAll<HTMLAnchorElement>(".sb-toc-link");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              links.forEach((l) => l.classList.remove("sb-toc-link--active"));
+              const active = tocBody.querySelector(`[href="#${entry.target.id}"]`);
+              active?.classList.add("sb-toc-link--active");
+            }
+          });
+        },
+        { rootMargin: "-20% 0px -70% 0px" }
+      );
+      headings.forEach((h) => observer.observe(h));
+    }
+  }
+
+  // ── reading progress ─────────────────────────────────────────
+  const fill   = document.getElementById("sb-prog-fill");
+  const pctEl  = document.getElementById("sb-prog-pct");
+
+  function updateProgress() {
+    if (!fill || !pctEl) return;
+    const scrollTop = window.scrollY;
+    const docH      = document.documentElement.scrollHeight - window.innerHeight;
+    const pct       = docH > 0 ? Math.round((scrollTop / docH) * 100) : 0;
+    fill.style.width = `${pct}%`;
+    pctEl.textContent = `${pct}%`;
+  }
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  updateProgress();
+</script>

@@ -2,8 +2,8 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { Icon } from "astro-icon/components";
 import { getCollection, type CollectionEntry } from "astro:content";
+import "@/styles/blog.css";
 
 const allPosts = await getCollection("blog");
 
@@ -16,192 +16,215 @@ const publishedPosts = allPosts
   );
 
 const allTags = [...new Set(publishedPosts.flatMap((p: CollectionEntry<"blog">) => p.data.tags))].sort();
+
+// tag frequency map for sidebar
+const tagFreq: Record<string, number> = {};
+publishedPosts.forEach((p: CollectionEntry<"blog">) =>
+  p.data.tags.forEach((t: string) => { tagFreq[t] = (tagFreq[t] || 0) + 1; })
+);
+const sortedTagFreq = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]);
 ---
 
 <BaseLayout title="Blog - Artem Sakhniuk" description="Articles and thoughts from Artem Sakhniuk">
   <Header />
 
-  <main class="min-h-screen pt-24 pb-16">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl sm:text-4xl font-bold mb-2">Blog</h1>
-      <p class="text-[var(--color-text-secondary)] mb-6">
-        Thoughts, notes, and things I've learned.
-      </p>
+  <main class="blog-terminal min-h-screen pt-24 pb-16">
+    <div class="blog-outer">
 
-      <div class="flex flex-col sm:flex-row gap-3 mb-8">
-        <div class="relative flex-1">
-          <Icon
-            name="lucide:search"
-            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-tertiary)]"
-          />
+      <!-- ══ MAIN COLUMN ══════════════════════════════════════════ -->
+      <div class="blog-main">
+
+        <!-- manpage-style header -->
+        <div class="terminal-header mb-8">
+          <div class="term-top-bar">
+            <span class="term-cmd">blog(1)</span>
+            <span class="term-center">ARTEM SAKHNIUK</span>
+            <span class="term-cmd">blog(1)</span>
+          </div>
+          <div class="term-section-label mt-4 mb-1">NAME</div>
+          <div class="term-indent">
+            <span class="term-bold">blog</span> — thoughts, notes, and things I've learned
+          </div>
+          <div class="term-section-label mt-4 mb-1">SYNOPSIS</div>
+          <div class="term-indent term-mono">
+            <span class="term-prompt">$</span> grep <span class="term-arg" id="synopsis-query">"..."</span> ./posts/ --tag=<span class="term-arg" id="synopsis-tag">all</span>
+          </div>
+        </div>
+
+        <!-- search -->
+        <div class="term-section-label mb-2">SEARCH</div>
+        <div class="term-search-wrap mb-6">
+          <span class="term-prompt-inline">$</span>
           <input
             id="blog-search"
             type="text"
-            placeholder="Search posts..."
-            class="w-full pl-9 pr-4 py-2 text-sm rounded-lg outline-none transition-colors duration-200"
-            class:list={[
-              "bg-[var(--color-bg-secondary)] border border-[var(--color-border-light)]",
-              "text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]",
-              "focus:border-[var(--color-text-secondary)]",
-            ]}
+            placeholder="grep posts..."
+            autocomplete="off"
+            class="term-search-input"
           />
+          <span class="term-cursor" aria-hidden="true">█</span>
         </div>
-      </div>
 
-      {allTags.length > 0 && (
-        <div id="blog-tags" class="flex flex-wrap gap-2 mb-8">
-          <button
-            data-tag="all"
-            class="tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200"
-            class:list={[
-              "bg-[var(--color-text-primary)] text-[var(--color-bg-main)]",
-            ]}
-          >
-            All
-          </button>
-          {allTags.map((tag) => (
-            <button
-              data-tag={tag}
-              class="tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 cursor-pointer"
-              class:list={[
-                "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
-                "hover:bg-[var(--color-text-primary)] hover:text-[var(--color-bg-main)]",
-              ]}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div id="blog-list" class="flex flex-col gap-8">
-        {publishedPosts.length === 0 ? (
-          <p class="text-[var(--color-text-tertiary)]">No posts yet. Check back soon!</p>
-        ) : (
-          publishedPosts.map((post: any) => (
-            <a
-              href={`/artem-sakhniuk.github.io/blog/${post.slug}/`}
-              class="blog-card block group"
-              data-tags={post.data.tags.join(",")}
-              data-title={post.data.title.toLowerCase()}
-              data-description={(post.data.description || "").toLowerCase()}
-            >
-              <article
-                class="p-6 rounded-xl transition-all duration-200"
-                class:list={[
-                  "bg-[var(--color-card-bg)] border border-[var(--color-border-light)]",
-                  "hover:shadow-lg hover:shadow-[var(--color-card-shadow)] hover:-translate-y-0.5",
-                ]}
-              >
-                <div class="flex items-center gap-2 text-sm text-[var(--color-text-tertiary)] mb-3">
-                  <Icon name="lucide:calendar" class="w-4 h-4" />
-                  <time datetime={post.data.publishedDate.toISOString()}>
-                    {post.data.publishedDate.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
-                </div>
-
-                <h2
-                  class="text-xl font-semibold mb-2 transition-colors duration-200"
-                  class:list={[
-                    "text-[var(--color-text-primary)] group-hover:text-[var(--color-text-secondary)]",
-                  ]}
-                >
-                  {post.data.title}
-                </h2>
-
-                {post.data.description && (
-                  <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-                    {post.data.description}
-                  </p>
-                )}
-
-                {post.data.tags.length > 0 && (
-                  <div class="flex flex-wrap gap-2 mt-4">
-                    {post.data.tags.map((tag: string) => (
-                      <span
-                        class="px-2.5 py-0.5 text-xs font-medium rounded-full"
-                        class:list={[
-                          "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
-                        ]}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </article>
-            </a>
-          ))
+        <!-- tag filter -->
+        {allTags.length > 0 && (
+          <div class="term-section-label mb-2">FILTER</div>
+          <div id="blog-tags" class="term-tags mb-8">
+            <button data-tag="all" class="tag-btn tag-btn--active">[all]</button>
+            {allTags.map((tag) => (
+              <button data-tag={tag} class="tag-btn">[{tag}]</button>
+            ))}
+          </div>
         )}
-      </div>
-    </div>
+
+        <!-- ls-style column header (desktop only) -->
+        <div class="term-section-label mb-1">POSTS</div>
+        <div class="ls-header">
+          <span class="ls-col-num">#</span>
+          <span class="ls-col-perm">permissions</span>
+          <span class="ls-col-date">date</span>
+          <span class="ls-col-title">title</span>
+        </div>
+
+        <!-- post list -->
+        <div id="blog-list" class="term-post-list">
+          {publishedPosts.length === 0 ? (
+            <p class="term-empty">// no posts yet — check back soon</p>
+          ) : (
+            publishedPosts.map((post: any, i: number) => (
+              <a
+                href={`/artem-sakhniuk.github.io/blog/${post.slug}/`}
+                class="blog-card term-card"
+                data-tags={post.data.tags.join(",")}
+                data-title={post.data.title.toLowerCase()}
+                data-description={(post.data.description || "").toLowerCase()}
+              >
+                <article>
+                  <!-- desktop: ls-row layout -->
+                  <div class="ls-row">
+                    <span class="ls-linenum">{String(i + 1).padStart(3, '0')}</span>
+                    <span class="ls-perm">-rw-r--r--</span>
+                    <time class="ls-date" datetime={post.data.publishedDate.toISOString()}>
+                      {post.data.publishedDate.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })}
+                    </time>
+                    <div class="ls-title-wrap">
+                      <span class="term-card-arrow">▶</span>
+                      <span class="term-card-title">{post.data.title}</span>
+                    </div>
+                  </div>
+
+                  <!-- description + tags (always visible, indented) -->
+                  {post.data.description && (
+                    <div class="term-card-meta">
+                      <span class="ls-meta-indent"></span>
+                      <span class="term-meta-key">desc</span>
+                      <span class="term-meta-sep">:</span>
+                      <span class="term-card-desc">{post.data.description}</span>
+                    </div>
+                  )}
+
+                  {post.data.tags.length > 0 && (
+                    <div class="term-card-meta">
+                      <span class="ls-meta-indent"></span>
+                      <span class="term-meta-key">tags</span>
+                      <span class="term-meta-sep">:</span>
+                      <span class="term-card-tags">
+                        {post.data.tags.map((tag: string, j: number) => (
+                          <span class="term-tag-inline">[{tag}]{j < post.data.tags.length - 1 ? " " : ""}</span>
+                        ))}
+                      </span>
+                    </div>
+                  )}
+                </article>
+              </a>
+            ))
+          )}
+        </div>
+
+        <!-- footer prompt -->
+        <div class="term-footer-line mt-10">
+          <span class="term-prompt">$</span>
+          <span class="term-blink">_</span>
+        </div>
+
+      </div><!-- /blog-main -->
+
+
+      <!-- ══ SIDEBAR (desktop only) ════════════════════════════════ -->
+      <aside class="blog-sidebar" aria-label="Terminal sidebar">
+
+        <!-- clock panel -->
+        <div class="sb-panel">
+          <div class="sb-panel-top">┌─ sys::clock ─┐</div>
+          <div class="sb-panel-body">
+            <div class="sb-clock-label">uptime</div>
+            <div id="sb-clock" class="sb-clock">--:--:--</div>
+            <div class="sb-clock-label" style="margin-top:0.6rem">date</div>
+            <div id="sb-date" class="sb-date">--- -- ----</div>
+          </div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+        <!-- stats panel -->
+        <div class="sb-panel">
+          <div class="sb-panel-top">┌─ blog::stats ┐</div>
+          <div class="sb-panel-body">
+            <div class="sb-stat-row">
+              <span class="sb-stat-key">posts</span>
+              <span class="sb-stat-val">{publishedPosts.length}</span>
+            </div>
+            <div class="sb-stat-row">
+              <span class="sb-stat-key">tags</span>
+              <span class="sb-stat-val">{allTags.length}</span>
+            </div>
+            <div class="sb-stat-row">
+              <span class="sb-stat-key">latest</span>
+              <span class="sb-stat-val sb-stat-small">
+                {publishedPosts[0]
+                  ? publishedPosts[0].data.publishedDate.toLocaleDateString("en-US", { month: "short", year: "numeric" })
+                  : "—"}
+              </span>
+            </div>
+          </div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+        <!-- tag freq panel -->
+        {sortedTagFreq.length > 0 && (
+          <div class="sb-panel">
+            <div class="sb-panel-top">┌─ tag::freq ──┐</div>
+            <div class="sb-panel-body">
+              {sortedTagFreq.map(([tag, count]) => (
+                <div class="sb-freq-row">
+                  <span class="sb-freq-tag">[{tag}]</span>
+                  <span class="sb-freq-bar">
+                    {"█".repeat(count)}
+                    <span class="sb-freq-count"> {count}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+            <div class="sb-panel-bot">└──────────────┘</div>
+          </div>
+        )}
+
+        <!-- env panel -->
+        <div class="sb-panel">
+          <div class="sb-panel-top">┌─ env ────────┐</div>
+          <div class="sb-panel-body sb-env">
+            <div><span class="sb-env-key">USER</span>=artem</div>
+            <div><span class="sb-env-key">SHELL</span>=/bin/zsh</div>
+            <div><span class="sb-env-key">EDITOR</span>=nvim</div>
+            <div><span class="sb-env-key">LANG</span>=en_GB.UTF-8</div>
+          </div>
+          <div class="sb-panel-bot">└──────────────┘</div>
+        </div>
+
+      </aside><!-- /blog-sidebar -->
+
+    </div><!-- /blog-outer -->
   </main>
 
   <Footer />
 </BaseLayout>
 
-<script>
-  const searchInput = document.getElementById("blog-search") as HTMLInputElement | null;
-  const tagBtns = document.querySelectorAll(".tag-btn");
-  const cards = document.querySelectorAll(".blog-card");
-  let activeTag = "all";
-
-  function filter() {
-    const query = (searchInput?.value || "").toLowerCase().trim();
-
-    let visibleCount = 0;
-
-    cards.forEach((card) => {
-      const cardEl = card as HTMLElement;
-      const cardTags = cardEl.dataset.tags || "";
-      const cardTitle = cardEl.dataset.title || "";
-      const cardDesc = cardEl.dataset.description || "";
-
-      const matchesTag = activeTag === "all" || cardTags.split(",").includes(activeTag);
-      const matchesSearch =
-        !query ||
-        cardTitle.includes(query) ||
-        cardDesc.includes(query);
-
-      if (matchesTag && matchesSearch) {
-        cardEl.style.display = "";
-        visibleCount++;
-      } else {
-        cardEl.style.display = "none";
-      }
-    });
-
-    const list = document.getElementById("blog-list")!;
-    let existing = document.getElementById("blog-empty-msg");
-    if (visibleCount === 0) {
-      if (!existing) {
-        const msg = document.createElement("p");
-        msg.id = "blog-empty-msg";
-        msg.className = "text-[var(--color-text-tertiary)]";
-        msg.textContent = "No posts match your search.";
-        list.appendChild(msg);
-      }
-    } else {
-      existing?.remove();
-    }
-  }
-
-  searchInput?.addEventListener("input", filter);
-
-  tagBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      tagBtns.forEach((b) => {
-        (b as HTMLElement).className =
-          "tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-text-primary)] hover:text-[var(--color-bg-main)]";
-      });
-      (btn as HTMLElement).className =
-        "tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 bg-[var(--color-text-primary)] text-[var(--color-bg-main)]";
-      activeTag = (btn as HTMLElement).dataset.tag || "all";
-      filter();
-    });
-  });
-</script>
+<script src="@/scripts/blog.js"></script>
