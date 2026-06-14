@@ -245,19 +245,9 @@ body {
   }
 }
 
-::-webkit-scrollbar {
-  width: 8px;
+html {
+  scrollbar-width: none;
 }
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg-main);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-text-tertiary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
+html::-webkit-scrollbar {
+  display: none;
 }
