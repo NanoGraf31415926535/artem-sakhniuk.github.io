@@ -65,7 +65,7 @@ const { locale } = Astro.props;
         {t("hero.askAi", locale)}
       </button>
       <a
-        href={profile.cvPath}
+        href={profile.base + "/" + profile.cvPath}
         download="Artem_Sakhniuk_CV.pdf"
         class="hero-btn-ghost px-6 py-3.5 sm:py-3 rounded-full text-sm sm:text-base font-semibold border backdrop-blur-sm transition-all duration-300 border-[var(--color-border-light)] text-[var(--color-text-secondary)]/70 hover:border-[var(--color-text-primary)] hover:text-[var(--color-text-primary)]"
       >
