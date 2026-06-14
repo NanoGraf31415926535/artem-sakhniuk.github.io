@@ -1,7 +1,7 @@
 ---
 title: "My first blog post"
 publishedDate: 2026-06-14
-tags: []
+tags: ["science", "nature"]
 description: "My first blog post"
 draft: false
 ---

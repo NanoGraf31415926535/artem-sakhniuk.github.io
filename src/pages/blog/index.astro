@@ -11,8 +11,11 @@ const publishedPosts = allPosts
   .filter((post: CollectionEntry<"blog">) => !post.data.draft || import.meta.env.DEV)
   .sort(
     (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
-      b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
+      b.data.publishedDate.getTime() - a.data.publishedDate.getTime() ||
+      a.data.title.localeCompare(b.data.title),
   );
+
+const allTags = [...new Set(publishedPosts.flatMap((p: CollectionEntry<"blog">) => p.data.tags))].sort();
 ---
 
 <BaseLayout title="Blog - Artem Sakhniuk" description="Articles and thoughts from Artem Sakhniuk">
@@ -21,75 +24,184 @@ const publishedPosts = allPosts
   <main class="min-h-screen pt-24 pb-16">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl sm:text-4xl font-bold mb-2">Blog</h1>
-      <p class="text-[var(--color-text-secondary)] mb-12">
+      <p class="text-[var(--color-text-secondary)] mb-6">
         Thoughts, notes, and things I've learned.
       </p>
 
-      {
-        publishedPosts.length === 0 ? (
+      <div class="flex flex-col sm:flex-row gap-3 mb-8">
+        <div class="relative flex-1">
+          <Icon
+            name="lucide:search"
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-text-tertiary)]"
+          />
+          <input
+            id="blog-search"
+            type="text"
+            placeholder="Search posts..."
+            class="w-full pl-9 pr-4 py-2 text-sm rounded-lg outline-none transition-colors duration-200"
+            class:list={[
+              "bg-[var(--color-bg-secondary)] border border-[var(--color-border-light)]",
+              "text-[var(--color-text-primary)] placeholder:text-[var(--color-text-tertiary)]",
+              "focus:border-[var(--color-text-secondary)]",
+            ]}
+          />
+        </div>
+      </div>
+
+      {allTags.length > 0 && (
+        <div id="blog-tags" class="flex flex-wrap gap-2 mb-8">
+          <button
+            data-tag="all"
+            class="tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200"
+            class:list={[
+              "bg-[var(--color-text-primary)] text-[var(--color-bg-main)]",
+            ]}
+          >
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button
+              data-tag={tag}
+              class="tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 cursor-pointer"
+              class:list={[
+                "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
+                "hover:bg-[var(--color-text-primary)] hover:text-[var(--color-bg-main)]",
+              ]}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div id="blog-list" class="flex flex-col gap-8">
+        {publishedPosts.length === 0 ? (
           <p class="text-[var(--color-text-tertiary)]">No posts yet. Check back soon!</p>
         ) : (
-          <div class="flex flex-col gap-8">
-            {publishedPosts.map((post: CollectionEntry<"blog">) => (
-              <a
-                href={`/artem-sakhniuk.github.io/blog/${post.slug}/`}
-                class="block group"
+          publishedPosts.map((post: any) => (
+            <a
+              href={`/artem-sakhniuk.github.io/blog/${post.slug}/`}
+              class="blog-card block group"
+              data-tags={post.data.tags.join(",")}
+              data-title={post.data.title.toLowerCase()}
+              data-description={(post.data.description || "").toLowerCase()}
+            >
+              <article
+                class="p-6 rounded-xl transition-all duration-200"
+                class:list={[
+                  "bg-[var(--color-card-bg)] border border-[var(--color-border-light)]",
+                  "hover:shadow-lg hover:shadow-[var(--color-card-shadow)] hover:-translate-y-0.5",
+                ]}
               >
-                <article
-                  class="p-6 rounded-xl transition-all duration-200"
+                <div class="flex items-center gap-2 text-sm text-[var(--color-text-tertiary)] mb-3">
+                  <Icon name="lucide:calendar" class="w-4 h-4" />
+                  <time datetime={post.data.publishedDate.toISOString()}>
+                    {post.data.publishedDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </div>
+
+                <h2
+                  class="text-xl font-semibold mb-2 transition-colors duration-200"
                   class:list={[
-                    "bg-[var(--color-card-bg)] border border-[var(--color-border-light)]",
-                    "hover:shadow-lg hover:shadow-[var(--color-card-shadow)] hover:-translate-y-0.5",
+                    "text-[var(--color-text-primary)] group-hover:text-[var(--color-text-secondary)]",
                   ]}
                 >
-                  <div class="flex items-center gap-2 text-sm text-[var(--color-text-tertiary)] mb-3">
-                    <Icon name="lucide:calendar" class="w-4 h-4" />
-                    <time datetime={post.data.publishedDate.toISOString()}>
-                      {post.data.publishedDate.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </time>
+                  {post.data.title}
+                </h2>
+
+                {post.data.description && (
+                  <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
+                    {post.data.description}
+                  </p>
+                )}
+
+                {post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-2 mt-4">
+                    {post.data.tags.map((tag: string) => (
+                      <span
+                        class="px-2.5 py-0.5 text-xs font-medium rounded-full"
+                        class:list={[
+                          "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
+                        ]}
+                      >
+                        {tag}
+                      </span>
+                    ))}
                   </div>
-
-                  <h2
-                    class="text-xl font-semibold mb-2 transition-colors duration-200"
-                    class:list={[
-                      "text-[var(--color-text-primary)] group-hover:text-[var(--color-text-secondary)]",
-                    ]}
-                  >
-                    {post.data.title}
-                  </h2>
-
-                  {post.data.description && (
-                    <p class="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-                      {post.data.description}
-                    </p>
-                  )}
-
-                  {post.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-2 mt-4">
-                      {post.data.tags.map((tag: string) => (
-                        <span
-                          class="px-2.5 py-0.5 text-xs font-medium rounded-full"
-                          class:list={[
-                            "bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)]",
-                          ]}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </article>
-              </a>
-            ))}
-          </div>
-        )
-      }
+                )}
+              </article>
+            </a>
+          ))
+        )}
+      </div>
     </div>
   </main>
 
   <Footer />
 </BaseLayout>
+
+<script>
+  const searchInput = document.getElementById("blog-search") as HTMLInputElement | null;
+  const tagBtns = document.querySelectorAll(".tag-btn");
+  const cards = document.querySelectorAll(".blog-card");
+  let activeTag = "all";
+
+  function filter() {
+    const query = (searchInput?.value || "").toLowerCase().trim();
+
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardEl = card as HTMLElement;
+      const cardTags = cardEl.dataset.tags || "";
+      const cardTitle = cardEl.dataset.title || "";
+      const cardDesc = cardEl.dataset.description || "";
+
+      const matchesTag = activeTag === "all" || cardTags.split(",").includes(activeTag);
+      const matchesSearch =
+        !query ||
+        cardTitle.includes(query) ||
+        cardDesc.includes(query);
+
+      if (matchesTag && matchesSearch) {
+        cardEl.style.display = "";
+        visibleCount++;
+      } else {
+        cardEl.style.display = "none";
+      }
+    });
+
+    const list = document.getElementById("blog-list")!;
+    let existing = document.getElementById("blog-empty-msg");
+    if (visibleCount === 0) {
+      if (!existing) {
+        const msg = document.createElement("p");
+        msg.id = "blog-empty-msg";
+        msg.className = "text-[var(--color-text-tertiary)]";
+        msg.textContent = "No posts match your search.";
+        list.appendChild(msg);
+      }
+    } else {
+      existing?.remove();
+    }
+  }
+
+  searchInput?.addEventListener("input", filter);
+
+  tagBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      tagBtns.forEach((b) => {
+        (b as HTMLElement).className =
+          "tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 bg-[var(--color-bg-tertiary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-text-primary)] hover:text-[var(--color-bg-main)]";
+      });
+      (btn as HTMLElement).className =
+        "tag-btn px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 bg-[var(--color-text-primary)] text-[var(--color-bg-main)]";
+      activeTag = (btn as HTMLElement).dataset.tag || "all";
+      filter();
+    });
+  });
+</script>

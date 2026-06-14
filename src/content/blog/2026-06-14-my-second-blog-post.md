@@ -1,7 +1,7 @@
 ---
 title: "My second blog post"
 publishedDate: 2026-06-14
-tags: []
+tags: ["tech", "ai"]
 description: "My second blog post"
 draft: false
 ---
