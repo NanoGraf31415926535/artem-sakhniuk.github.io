@@ -59,15 +59,21 @@ let maxUpdateId = lastUpdateId;
 
 for (const post of channelPosts) {
   const lines = post.text.split("\n");
-  const title = lines[0].trim();
+  const rawTitle = lines[0].trim();
   const body = lines.slice(1).join("\n").trim();
+
+  let title = rawTitle;
+  if (!body && rawTitle.length > 80) {
+    title = rawTitle.slice(0, 80).trimEnd() + "...";
+  }
 
   if (!title) continue;
 
   const slug = title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/^-|-$/g, "")
+    .slice(0, 80);
 
   const date = new Date(post.date * 1000);
   const dateStr = date.toISOString().split("T")[0];
@@ -75,6 +81,8 @@ for (const post of channelPosts) {
   if (!existsSync(CONTENT_DIR)) {
     mkdirSync(CONTENT_DIR, { recursive: true });
   }
+
+  const postBody = body || rawTitle;
 
   const frontmatter = `---
 title: "${title}"
@@ -84,7 +92,7 @@ description: "${title}"
 draft: false
 ---
 
-${body}
+${postBody}
 `;
 
   const filename = `${CONTENT_DIR}/${dateStr}-${slug}.md`;
