@@ -1,5 +1,4 @@
 ---
-import { Icon } from "astro-icon/components";
 import { faq } from "@/data/faq";
 ---
 
@@ -581,8 +580,8 @@ Artem is in a loving relationship with his wonderful girlfriend Victoria, whom h
     }
   };
 
-  fab.addEventListener("click", openModal);
-  document.getElementById("open-ai-chat-btn")?.addEventListener("click", openModal);
+  fab.addEventListener("click", () => openModal());
+  document.getElementById("open-ai-chat-btn")?.addEventListener("click", () => openModal());
 
   const closeModal = () => {
     modal.classList.add("hidden");
